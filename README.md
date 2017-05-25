@@ -11,5 +11,5 @@
 4.日志模块    logservice  </br>
 5.缓存模块    cache  </br>
 6.配置模块    config  </br>
-7.插件功能  
+7.插件功能   
  
