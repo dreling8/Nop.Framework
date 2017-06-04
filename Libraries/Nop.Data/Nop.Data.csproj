@@ -67,7 +67,13 @@
     <Compile Include="Initializers\DropCreateCeDatabaseAlways.cs" />
     <Compile Include="Initializers\DropCreateCeDatabaseIfModelChanges.cs" />
     <Compile Include="Initializers\SqlCeInitializer.cs" />
+    <Compile Include="Mapping\Logging\ActivityLogMap.cs" />
+    <Compile Include="Mapping\Logging\ActivityLogTypeMap.cs" />
+    <Compile Include="Mapping\Logging\LogMap.cs" />
     <Compile Include="Mapping\Test\TestEntityMap.cs" />
+    <Compile Include="Mapping\Users\UserRoleMap.cs" />
+    <Compile Include="Mapping\Users\ExternalAuthenticationRecordMap.cs" />
+    <Compile Include="Mapping\Users\UserMap.cs" />
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="DataReaderExtensions.cs" />
