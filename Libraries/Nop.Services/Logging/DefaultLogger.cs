@@ -20,8 +20,8 @@ namespace Nop.Services.Logging
         private readonly IRepository<Log> _logRepository;
         private readonly IWebHelper _webHelper;
         private readonly IDbContext _dbContext;
-        private readonly IDataProvider _dataProvider;
-        private readonly CommonSettings _commonSettings;
+        //private readonly IDataProvider _dataProvider;
+        //private readonly CommonSettings _commonSettings;
         
         #endregion
         
@@ -37,15 +37,16 @@ namespace Nop.Services.Logging
         /// <param name="commonSettings">Common settings</param>
         public DefaultLogger(IRepository<Log> logRepository, 
             IWebHelper webHelper,
-            IDbContext dbContext, 
-            IDataProvider dataProvider, 
-            CommonSettings commonSettings)
+            IDbContext dbContext
+            //IDataProvider dataProvider
+            //CommonSettings commonSettings
+            )
         {
             this._logRepository = logRepository;
             this._webHelper = webHelper;
             this._dbContext = dbContext;
-            this._dataProvider = dataProvider;
-            this._commonSettings = commonSettings;
+            //this._dataProvider = dataProvider;
+            //this._commonSettings = commonSettings;
         }
 
         #endregion
@@ -59,15 +60,16 @@ namespace Nop.Services.Logging
         /// <returns>Result</returns>
         protected virtual bool IgnoreLog(string message)
         {
-            if (!_commonSettings.IgnoreLogWordlist.Any())
-                return false;
+            return false;
+            //if (!_commonSettings.IgnoreLogWordlist.Any())
+            //    return false;
 
-            if (String.IsNullOrWhiteSpace(message))
-                return false;
+            //if (String.IsNullOrWhiteSpace(message))
+            //    return false;
 
-            return _commonSettings
-                .IgnoreLogWordlist
-                .Any(x => message.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            //return _commonSettings
+            //    .IgnoreLogWordlist
+            //    .Any(x => message.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
 
         #endregion
@@ -119,22 +121,24 @@ namespace Nop.Services.Logging
         /// </summary>
         public virtual void ClearLog()
         {
-            if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported)
-            {
-                //although it's not a stored procedure we use it to ensure that a database supports them
-                //we cannot wait until EF team has it implemented - http://data.uservoice.com/forums/72025-entity-framework-feature-suggestions/suggestions/1015357-batch-cud-support
+            string logTableName = _dbContext.GetTableName<Log>();
+            _dbContext.ExecuteSqlCommand(String.Format("TRUNCATE TABLE [{0}]", logTableName));
+            //if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported)
+            //{
+            //    //although it's not a stored procedure we use it to ensure that a database supports them
+            //    //we cannot wait until EF team has it implemented - http://data.uservoice.com/forums/72025-entity-framework-feature-suggestions/suggestions/1015357-batch-cud-support
 
 
-                //do all databases support "Truncate command"?
-                string logTableName = _dbContext.GetTableName<Log>();
-                _dbContext.ExecuteSqlCommand(String.Format("TRUNCATE TABLE [{0}]", logTableName));
-            }
-            else
-            {
-                var log = _logRepository.Table.ToList();
-                foreach (var logItem in log)
-                    _logRepository.Delete(logItem);
-            }
+            //    //do all databases support "Truncate command"?
+            //    string logTableName = _dbContext.GetTableName<Log>();
+            //    _dbContext.ExecuteSqlCommand(String.Format("TRUNCATE TABLE [{0}]", logTableName));
+            //}
+            //else
+            //{
+            //    var log = _logRepository.Table.ToList();
+            //    foreach (var logItem in log)
+            //        _logRepository.Delete(logItem);
+            //}
         }
 
         /// <summary>

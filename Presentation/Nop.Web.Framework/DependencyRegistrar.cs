@@ -12,7 +12,7 @@ using Nop.Data;
 using Nop.Services.Logging;
 using Nop.Services.Tests;
 
-namespace Nop.Web
+namespace Nop.Web.Framework
 {
     /// <summary>
     /// Dependency registrar
@@ -54,6 +54,8 @@ namespace Nop.Web
             //log
             builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
 
+            
+
             //×¢ÈëObjectContext
             builder.Register<IDbContext>(c => new NopObjectContext("NopFramework")).InstancePerLifetimeScope();
 
@@ -78,4 +80,6 @@ namespace Nop.Web
             get { return 2; }
         }
     }
+
+    
 }

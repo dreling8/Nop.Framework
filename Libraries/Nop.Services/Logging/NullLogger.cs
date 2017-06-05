@@ -9,8 +9,9 @@ namespace Nop.Services.Logging
     /// <summary>
     /// Null logger
     /// </summary>
-    public partial class NullLogger : ILogger
+    public partial class NullLogger 
     {
+
         /// <summary>
         /// Determines whether a log level is enabled
         /// </summary>
