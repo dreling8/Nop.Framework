@@ -14,7 +14,7 @@ namespace Nop.Domain.Logging
         public int ActivityLogTypeId { get; set; }
 
         /// <summary>
-        /// Gets or sets the customer identifier
+        /// Gets or sets the user identifier
         /// </summary>
         public int UserId { get; set; }
 
@@ -34,7 +34,7 @@ namespace Nop.Domain.Logging
         public virtual ActivityLogType ActivityLogType { get; set; }
 
         /// <summary>
-        /// Gets the customer
+        /// Gets the user
         /// </summary>
         public virtual User User { get; set; }
 

@@ -7,7 +7,7 @@ namespace Nop.Domain.Users
     public partial class ExternalAuthenticationRecord : BaseEntity
     {
         /// <summary>
-        /// Gets or sets the customer identifier
+        /// Gets or sets the user identifier
         /// </summary>
         public int UserId { get; set; }
 
@@ -40,9 +40,9 @@ namespace Nop.Domain.Users
         /// Gets or sets the provider
         /// </summary>
         public string ProviderSystemName { get; set; }
-        
+
         /// <summary>
-        /// Gets or sets the customer
+        /// Gets or sets the user
         /// </summary>
         public virtual User User { get; set; }
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Nop.Domain.Users
 {
     /// <summary>
-    /// Represents a customer
+    /// Represents a user
     /// </summary>
     public partial class User : BaseEntity
     {
@@ -25,12 +25,12 @@ namespace Nop.Domain.Users
 
         public string Email { get; set; }
         /// <summary>
-        /// Gets or sets the email that should be re-validated. Used in scenarios when a customer is already registered and wants to change an email address.
+        /// Gets or sets the email that should be re-validated. Used in scenarios when a user is already registered and wants to change an email address.
         /// </summary>
         public string EmailToRevalidate { get; set; }
-                 
+
         /// <summary>
-        /// Gets or sets a value indicating whether the customer is required to re-login
+        /// Gets or sets a value indicating whether the user is required to re-login
         /// </summary>
         public bool RequireReLogin { get; set; }
 
@@ -39,27 +39,27 @@ namespace Nop.Domain.Users
         /// </summary>
         public int FailedLoginAttempts { get; set; }
         /// <summary>
-        /// Gets or sets the date and time until which a customer cannot login (locked out)
+        /// Gets or sets the date and time until which a user cannot login (locked out)
         /// </summary>
         public DateTime? CannotLoginUntilDateUtc { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the customer is active
+        /// Gets or sets a value indicating whether the user is active
         /// </summary>
         public bool Active { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the customer has been deleted
+        /// Gets or sets a value indicating whether the user has been deleted
         /// </summary>
         public bool Deleted { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the customer account is system
+        /// Gets or sets a value indicating whether the user account is system
         /// </summary>
         public bool IsSystemAccount { get; set; }
 
         /// <summary>
-        /// Gets or sets the customer system name
+        /// Gets or sets the user system name
         /// </summary>
         public string SystemName { get; set; }
 
@@ -82,11 +82,11 @@ namespace Nop.Domain.Users
         /// Gets or sets the date and time of last activity
         /// </summary>
         public DateTime LastActivityDateUtc { get; set; }
-          
+
         #region Navigation properties
 
         /// <summary>
-        /// Gets or sets customer generated content
+        /// Gets or sets user generated content
         /// </summary>
         public virtual ICollection<ExternalAuthenticationRecord> ExternalAuthenticationRecords
         {
@@ -95,7 +95,7 @@ namespace Nop.Domain.Users
         }
 
         /// <summary>
-        /// Gets or sets the customer roles
+        /// Gets or sets the user roles
         /// </summary>
         public virtual ICollection<UserRole> UserRoles
         {
