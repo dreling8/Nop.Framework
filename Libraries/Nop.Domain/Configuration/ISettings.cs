@@ -1,5 +1,5 @@
 ﻿
-namespace Nop.Domain
+namespace Nop.Domain.Configuration
 {
     /// <summary>
     /// Setting interface

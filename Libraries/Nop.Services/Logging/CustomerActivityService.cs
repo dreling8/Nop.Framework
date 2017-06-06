@@ -15,7 +15,7 @@ namespace Nop.Services.Logging
     /// <summary>
     /// Customer activity service
     /// </summary>
-    public class CustomerActivityService : IUserActivityService  
+    public class UserActivityService : IUserActivityService  
     {
         #region Constants
 
@@ -58,7 +58,7 @@ namespace Nop.Services.Logging
         /// <param name="dataProvider">WeData provider</param>
         /// <param name="commonSettings">Common settings</param>
         /// <param name="webHelper">Web helper</param>
-        public CustomerActivityService(ICacheManager cacheManager,
+        public UserActivityService(ICacheManager cacheManager,
             IRepository<ActivityLog> activityLogRepository,
             IRepository<ActivityLogType> activityLogTypeRepository,
             IWorkContext workContext,

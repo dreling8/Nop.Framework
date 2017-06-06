@@ -21,7 +21,7 @@ namespace Nop.Services.Logging
         private readonly IWebHelper _webHelper;
         private readonly IDbContext _dbContext;
         //private readonly IDataProvider _dataProvider;
-        //private readonly CommonSettings _commonSettings;
+        private readonly CommonSettings _commonSettings;
         
         #endregion
         
@@ -37,16 +37,16 @@ namespace Nop.Services.Logging
         /// <param name="commonSettings">Common settings</param>
         public DefaultLogger(IRepository<Log> logRepository, 
             IWebHelper webHelper,
-            IDbContext dbContext
+            IDbContext dbContext,
             //IDataProvider dataProvider
-            //CommonSettings commonSettings
+           CommonSettings commonSettings
             )
         {
             this._logRepository = logRepository;
             this._webHelper = webHelper;
             this._dbContext = dbContext;
             //this._dataProvider = dataProvider;
-            //this._commonSettings = commonSettings;
+            this._commonSettings = commonSettings;
         }
 
         #endregion
@@ -60,16 +60,15 @@ namespace Nop.Services.Logging
         /// <returns>Result</returns>
         protected virtual bool IgnoreLog(string message)
         {
-            return false;
-            //if (!_commonSettings.IgnoreLogWordlist.Any())
-            //    return false;
+            if (!_commonSettings.IgnoreLogWordlist.Any())
+                return false;
 
-            //if (String.IsNullOrWhiteSpace(message))
-            //    return false;
+            if (String.IsNullOrWhiteSpace(message))
+                return false;
 
-            //return _commonSettings
-            //    .IgnoreLogWordlist
-            //    .Any(x => message.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            return _commonSettings
+                .IgnoreLogWordlist
+                .Any(x => message.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
 
         #endregion

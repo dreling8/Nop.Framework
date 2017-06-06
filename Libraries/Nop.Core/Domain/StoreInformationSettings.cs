@@ -1,4 +1,5 @@
 ﻿using Nop.Core.Configuration;
+using Nop.Domain.Configuration;
 
 namespace Nop.Core.Domain
 {

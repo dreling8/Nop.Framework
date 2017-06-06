@@ -1,14 +1,22 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using Autofac;
+using Autofac.Builder;
+using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Nop.Core;
+using Nop.Core.Caching;
 using Nop.Core.Configuration;
 using Nop.Core.Data;
 using Nop.Core.Fakes;
 using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;
+using Nop.Domain.Configuration;
+using Nop.Services.Configuration;
 using Nop.Services.Logging;
 using Nop.Services.Tests;
 
@@ -50,11 +58,9 @@ namespace Nop.Web.Framework
 
             //web helper
             builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
-
-            //log
-            builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
-
-            
+             
+            //注入controllers
+            builder.RegisterControllers(typeFinder.GetAssemblies().ToArray());
 
             //注入ObjectContext
             builder.Register<IDbContext>(c => new NopObjectContext("NopFramework")).InstancePerLifetimeScope();
@@ -62,13 +68,32 @@ namespace Nop.Web.Framework
             // 注入ef到仓储
             builder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 
+
+            //log
+            builder.RegisterType<DefaultLogger>().As<ILogger>().InstancePerLifetimeScope();
+
+            //cache managers
+            if (config != null && config.RedisCachingEnabled)
+            {
+                builder.RegisterType<RedisConnectionWrapper>().As<IRedisConnectionWrapper>().SingleInstance();
+                builder.RegisterType<RedisCacheManager>().As<ICacheManager>().Named<ICacheManager>("nop_cache_static").InstancePerLifetimeScope();
+            }
+            else
+            {
+                builder.RegisterType<MemoryCacheManager>().As<ICacheManager>().Named<ICacheManager>("nop_cache_static").SingleInstance();
+            }
+            builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().Named<ICacheManager>("nop_cache_per_request").InstancePerLifetimeScope();
+
             // 注入Service及接口
             builder.RegisterAssemblyTypes(typeof(TestService).Assembly)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
-             
-            //注入controllers
-            builder.RegisterControllers(typeFinder.GetAssemblies().ToArray());
+
+            //use static cache (between HTTP requests)
+            builder.RegisterType<SettingService>().As<ISettingService>()
+                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"))
+                .InstancePerLifetimeScope();
+            builder.RegisterSource(new SettingsSource());
 
         }
 
@@ -77,9 +102,47 @@ namespace Nop.Web.Framework
         /// </summary>
         public int Order
         {
-            get { return 2; }
+            get { return 0; }
         }
     }
 
-    
+     
+    public class SettingsSource : IRegistrationSource
+    {
+        static readonly MethodInfo BuildMethod = typeof(SettingsSource).GetMethod(
+            "BuildRegistration",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        public IEnumerable<IComponentRegistration> RegistrationsFor(
+                Service service,
+                Func<Service, IEnumerable<IComponentRegistration>> registrations)
+        {
+            var ts = service as TypedService;
+            if (ts != null && typeof(ISettings).IsAssignableFrom(ts.ServiceType))
+            {
+                var buildMethod = BuildMethod.MakeGenericMethod(ts.ServiceType);
+                yield return (IComponentRegistration)buildMethod.Invoke(null, null);
+            }
+        }
+
+        static IComponentRegistration BuildRegistration<TSettings>() where TSettings : ISettings, new()
+        {
+            return RegistrationBuilder
+                .ForDelegate((c, p) =>
+                { 
+                    ////var currentStoreId = c.Resolve<IStoreContext>().CurrentStore.Id;
+                    //uncomment the code below if you want load settings per store only when you have two stores installed.
+                    //var currentStoreId = c.Resolve<IStoreService>().GetAllStores().Count > 1
+                    //    c.Resolve<IStoreContext>().CurrentStore.Id : 0;
+
+                    //although it's better to connect to your database and execute the following SQL:
+                    //DELETE FROM [Setting] WHERE [StoreId] > 0
+                    return c.Resolve<ISettingService>().LoadSetting<TSettings>();
+                })
+                .InstancePerLifetimeScope()
+                .CreateRegistration();
+        }
+
+        public bool IsAdapterForIndividualComponents { get { return false; } }
+    }
 }

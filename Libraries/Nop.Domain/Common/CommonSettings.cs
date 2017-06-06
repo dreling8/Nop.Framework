@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Nop.Core.Domain.Common;
+using Nop.Domain.Configuration;
 
 namespace Nop.Domain.Common
 {

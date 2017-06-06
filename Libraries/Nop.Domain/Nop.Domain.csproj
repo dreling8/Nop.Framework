@@ -45,6 +45,9 @@
     <Compile Include="Common\CommonSettings.cs" />
     <Compile Include="Common\FulltextSearchMode.cs" />
     <Compile Include="Configuration\ISettings.cs" />
+    <Compile Include="Configuration\Setting.cs" />
+    <Compile Include="Localization\ILocalizedEntity.cs" />
+    <Compile Include="Localization\ILocalizedEnum.cs" />
     <Compile Include="Logging\ActivityLog.cs" />
     <Compile Include="Logging\ActivityLogType.cs" />
     <Compile Include="Logging\Log.cs" />
