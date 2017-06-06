@@ -17,8 +17,7 @@ using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;
 using Nop.Domain.Configuration;
 using Nop.Services.Configuration;
-using Nop.Services.Logging;
-using Nop.Services.Tests;
+using Nop.Services.Logging; 
 
 namespace Nop.Web.Framework
 {
@@ -88,13 +87,12 @@ namespace Nop.Web.Framework
             builder.RegisterType<PerRequestCacheManager>().As<ICacheManager>().Named<ICacheManager>("nop_cache_per_request").InstancePerLifetimeScope();
 
             // 注入Service及接口
-            builder.RegisterAssemblyTypes(typeof(TestService).Assembly)
-                    .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
+            //builder.RegisterAssemblyTypes(typeof(TestService).Assembly)
+            //        .AsImplementedInterfaces()
+            //        .InstancePerLifetimeScope();
 
             builder.RegisterType<UserActivityService>().As<IUserActivityService>().InstancePerLifetimeScope();
-                 
-            
+             
 
             //use static cache (between HTTP requests)
             builder.RegisterType<SettingService>().As<ISettingService>()

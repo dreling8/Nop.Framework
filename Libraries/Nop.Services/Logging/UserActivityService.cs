@@ -40,7 +40,7 @@ namespace Nop.Services.Logging
         private readonly IRepository<ActivityLogType> _activityLogTypeRepository;
         private readonly IWorkContext _workContext;
         private readonly IDbContext _dbContext;
-        private readonly IDataProvider _dataProvider;
+        //private readonly IDataProvider _dataProvider;
         private readonly CommonSettings _commonSettings;
         private readonly IWebHelper _webHelper;
         #endregion
@@ -197,7 +197,7 @@ namespace Nop.Services.Logging
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, params string[][] commentParams)
+        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, params object[] commentParams)
         {
             return InsertActivity(_workContext.CurrentUser, systemKeyword, comment, commentParams);
         }
