@@ -62,7 +62,8 @@ namespace Nop.Services.Logging
             IRepository<ActivityLog> activityLogRepository,
             IRepository<ActivityLogType> activityLogTypeRepository,
             IWorkContext workContext,
-            IDbContext dbContext, IDataProvider dataProvider,
+            IDbContext dbContext, 
+            //IDataProvider dataProvider,
             CommonSettings commonSettings,
             IWebHelper webHelper)
         {
@@ -71,7 +72,7 @@ namespace Nop.Services.Logging
             this._activityLogTypeRepository = activityLogTypeRepository;
             this._workContext = workContext;
             this._dbContext = dbContext;
-            this._dataProvider = dataProvider;
+            //this._dataProvider = dataProvider;
             this._commonSettings = commonSettings;
             this._webHelper = webHelper;
         }
@@ -196,7 +197,7 @@ namespace Nop.Services.Logging
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, params object[] commentParams)
+        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, params string[][] commentParams)
         {
             return InsertActivity(_workContext.CurrentUser, systemKeyword, comment, commentParams);
         }
@@ -301,7 +302,8 @@ namespace Nop.Services.Logging
         /// </summary>
         public virtual void ClearAllActivities()
         {
-            if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported)
+            //if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported)
+            if (_commonSettings.UseStoredProceduresIfSupported)
             {
                 //although it's not a stored procedure we use it to ensure that a database supports them
                 //we cannot wait until EF team has it implemented - http://data.uservoice.com/forums/72025-entity-framework-feature-suggestions/suggestions/1015357-batch-cud-support

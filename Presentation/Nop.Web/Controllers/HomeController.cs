@@ -13,24 +13,32 @@ namespace Nop.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public ITestService _testService;
-
+        public ITestService _testService; 
         public ILogger _logger;
+        public IUserActivityService _userActivityService;
 
         public HomeController(
           ITestService testService,
-          ILogger logger
+          ILogger logger,
+          IUserActivityService userActivityService
           )
         {
             _testService = testService;
             _logger = logger;
+            _userActivityService = userActivityService;
         }
 
         public ActionResult Index()
-        { 
-            _logger.InsertLog(LogLevel.Debug, "test");
-
+        {
+            TestCommonMoudle();
             return View();
+        }
+
+
+        private void TestCommonMoudle()
+        {
+            _logger.InsertLog(LogLevel.Information, "index visit");
+            _userActivityService.InsertActivity("AddUser", "添加用户{0},{1}", new string[] { "aaaa", "bbb" });
         }
 
     }

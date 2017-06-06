@@ -3,9 +3,9 @@ using Nop.Domain.Logging;
 
 namespace Nop.Data.Mapping.Logging
 {
-    public partial class LogActivityMap : NopEntityTypeConfiguration<ActivityLog>
+    public partial class ActivityLogMap : NopEntityTypeConfiguration<ActivityLog>
     {
-        public LogActivityMap()
+        public ActivityLogMap()
         {
             this.ToTable("ActivityLog");
             this.HasKey(al => al.Id);

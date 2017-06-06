@@ -150,7 +150,7 @@
     <Compile Include="Configuration\ISettingService.cs" />
     <Compile Include="Configuration\SettingExtensions.cs" />
     <Compile Include="Configuration\SettingService.cs" />
-    <Compile Include="Logging\CustomerActivityService.cs" />
+    <Compile Include="Logging\UserActivityService.cs" />
     <Compile Include="Logging\DefaultLogger.cs" />
     <Compile Include="Logging\IUserActivityService.cs" />
     <Compile Include="Logging\ILogger.cs" />

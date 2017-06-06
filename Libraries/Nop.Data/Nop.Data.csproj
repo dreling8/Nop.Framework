@@ -68,8 +68,8 @@
     <Compile Include="Initializers\DropCreateCeDatabaseIfModelChanges.cs" />
     <Compile Include="Initializers\SqlCeInitializer.cs" />
     <Compile Include="Mapping\Configuration\SettingMap.cs" />
-    <Compile Include="Mapping\Logging\LogActivityMap.cs" />
-    <Compile Include="Mapping\Logging\LogActivityTypeMap.cs" />
+    <Compile Include="Mapping\Logging\ActivityLogMap.cs" />
+    <Compile Include="Mapping\Logging\ActivityLogTypeMap.cs" />
     <Compile Include="Mapping\Logging\LogMap.cs" />
     <Compile Include="Mapping\Security\PermissionRecordMap.cs" />
     <Compile Include="Mapping\Test\TestEntityMap.cs" />

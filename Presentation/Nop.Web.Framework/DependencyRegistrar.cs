@@ -58,7 +58,10 @@ namespace Nop.Web.Framework
 
             //web helper
             builder.RegisterType<WebHelper>().As<IWebHelper>().InstancePerLifetimeScope();
-             
+
+            //work context
+            builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
+
             //×¢Èëcontrollers
             builder.RegisterControllers(typeFinder.GetAssemblies().ToArray());
 
@@ -88,6 +91,10 @@ namespace Nop.Web.Framework
             builder.RegisterAssemblyTypes(typeof(TestService).Assembly)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserActivityService>().As<IUserActivityService>().InstancePerLifetimeScope();
+                 
+            
 
             //use static cache (between HTTP requests)
             builder.RegisterType<SettingService>().As<ISettingService>()
