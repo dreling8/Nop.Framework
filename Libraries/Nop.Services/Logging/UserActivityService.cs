@@ -40,7 +40,7 @@ namespace Nop.Services.Logging
         private readonly IRepository<ActivityLogType> _activityLogTypeRepository;
         private readonly IWorkContext _workContext;
         private readonly IDbContext _dbContext;
-        //private readonly IDataProvider _dataProvider;
+        private readonly IDataProvider _dataProvider;
         private readonly CommonSettings _commonSettings;
         private readonly IWebHelper _webHelper;
         #endregion
@@ -63,7 +63,7 @@ namespace Nop.Services.Logging
             IRepository<ActivityLogType> activityLogTypeRepository,
             IWorkContext workContext,
             IDbContext dbContext, 
-            //IDataProvider dataProvider,
+             IDataProvider dataProvider,
             CommonSettings commonSettings,
             IWebHelper webHelper)
         {
@@ -72,7 +72,7 @@ namespace Nop.Services.Logging
             this._activityLogTypeRepository = activityLogTypeRepository;
             this._workContext = workContext;
             this._dbContext = dbContext;
-            //this._dataProvider = dataProvider;
+            this._dataProvider = dataProvider;
             this._commonSettings = commonSettings;
             this._webHelper = webHelper;
         }
@@ -311,8 +311,7 @@ namespace Nop.Services.Logging
         /// </summary>
         public virtual void ClearAllActivities()
         {
-            //if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported)
-            if (_commonSettings.UseStoredProceduresIfSupported)
+            if (_commonSettings.UseStoredProceduresIfSupported && _dataProvider.StoredProceduredSupported) 
             {
                 //although it's not a stored procedure we use it to ensure that a database supports them
                 //we cannot wait until EF team has it implemented - http://data.uservoice.com/forums/72025-entity-framework-feature-suggestions/suggestions/1015357-batch-cud-support

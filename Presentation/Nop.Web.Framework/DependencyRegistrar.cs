@@ -61,12 +61,28 @@ namespace Nop.Web.Framework
             //work context
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
 
-            //注入controllers
+            //controllers
             builder.RegisterControllers(typeFinder.GetAssemblies().ToArray());
 
-            //注入ObjectContext
-            builder.Register<IDbContext>(c => new NopObjectContext("NopFramework")).InstancePerLifetimeScope();
-
+             
+            //data layer
+            var dataSettingsManager = new DataSettingsManager();
+            var dataProviderSettings = dataSettingsManager.LoadSettings();
+            builder.Register(c => dataSettingsManager.LoadSettings()).As<DataSettings>();
+            builder.Register(x => new EfDataProviderManager(x.Resolve<DataSettings>())).As<BaseDataProviderManager>().InstancePerDependency();
+            builder.Register(x => x.Resolve<BaseDataProviderManager>().LoadDataProvider()).As<IDataProvider>().InstancePerDependency();
+            if (dataProviderSettings != null && dataProviderSettings.IsValid())
+            {
+                var efDataProviderManager = new EfDataProviderManager(dataSettingsManager.LoadSettings());
+                var dataProvider = efDataProviderManager.LoadDataProvider();
+                dataProvider.InitConnectionFactory(); 
+                builder.Register<IDbContext>(c => new NopObjectContext(dataProviderSettings.DataConnectionString)).InstancePerLifetimeScope();
+            }
+            else
+            {
+                builder.Register<IDbContext>(c => new NopObjectContext(dataSettingsManager.LoadSettings().DataConnectionString)).InstancePerLifetimeScope();
+            }
+             
             // 注入ef到仓储
             builder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
 

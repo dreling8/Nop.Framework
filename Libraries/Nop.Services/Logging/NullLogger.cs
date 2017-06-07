@@ -9,7 +9,7 @@ namespace Nop.Services.Logging
     /// <summary>
     /// Null logger
     /// </summary>
-    public partial class NullLogger 
+    public partial class NullLogger : ILogger
     {
 
         /// <summary>

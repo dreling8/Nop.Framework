@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Nop.Core.Infrastructure;
+using Nop.Domain.Common;
 using Nop.Domain.Logging;
 using Nop.Domain.Users;
 using Nop.Services.Logging; 
@@ -14,33 +15,33 @@ namespace Nop.Web.Controllers
     { 
         public ILogger _logger;
         public IUserActivityService _userActivityService;
-
+        public CommonSettings _commonSettings;
         public HomeController( 
           ILogger logger,
-          IUserActivityService userActivityService
+          IUserActivityService userActivityService,
+          CommonSettings commonSettings
           )
         { 
             _logger = logger;
             _userActivityService = userActivityService;
+            _commonSettings = commonSettings;
         }
 
         public ActionResult Index()
         {
-            TestCommonMoudle();
+            TestSettings();
+            TestLogger();
             return View();
         }
 
 
-        private void TestCommonMoudle()
+        private void TestSettings()
         {
-            var user = new User()
-            { 
-                Username = "adfsdf",
-                UserGuid = Guid.NewGuid(),
-                CreatedOnUtc = DateTime.UtcNow,
-                LastActivityDateUtc = DateTime.UtcNow,
-            };
+            var s = _commonSettings.IgnoreLogWordlist;
+        }
 
+        private void TestLogger()
+        { 
             _logger.InsertLog(LogLevel.Information, "index visit");
             _userActivityService.InsertActivity(ActivityLogTypeEnum.AddUser, "添加用户{0},{1}", new string[2] { "aaaa", "bbb" }); 
         }

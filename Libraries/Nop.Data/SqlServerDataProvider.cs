@@ -94,8 +94,10 @@ namespace Nop.Data
         /// </summary>
         public virtual void SetDatabaseInitializer()
         {
+            //如果需要创建表可修改这里
+
             //pass some table names to ensure that we have nopCommerce 2.X installed
-            var tablesToValidate = new[] { "Customer", "Discount", "Order", "Product", "ShoppingCartItem" };
+            var tablesToValidate = new[] { "User"  };
 
             //custom commands (stored procedures, indexes)
 

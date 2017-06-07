@@ -109,15 +109,15 @@ namespace Nop.Core.Infrastructure
         {
             //register dependencies
             RegisterDependencies(config);
-             
+
             //register mapper configurations
             //RegisterMapperConfiguration(config);
 
             //startup tasks
-            //if (!config.IgnoreStartupTasks)
-            //{
-            //    RunStartupTasks();
-            //}
+            if (!config.IgnoreStartupTasks)
+            {
+                RunStartupTasks();
+            }
 
         }
 
