@@ -109,8 +109,7 @@ namespace Nop.Core.Infrastructure
         {
             //register dependencies
             RegisterDependencies(config);
-
-            //没有使用config，暂时注释
+             
             //register mapper configurations
             //RegisterMapperConfiguration(config);
 
