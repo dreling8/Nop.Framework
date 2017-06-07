@@ -54,6 +54,15 @@ namespace Nop.Services.Logging
         /// <summary>
         /// Inserts an activity log item
         /// </summary>
+        /// <param name="logTypeEnum">The activity log type enum</param>
+        /// <param name="comment">The activity comment</param>
+        /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
+        /// <returns>Activity log item</returns>
+        ActivityLog InsertActivity(ActivityLogTypeEnum logTypeEnum, string comment, params object[] commentParams);
+
+        /// <summary>
+        /// Inserts an activity log item
+        /// </summary>
         /// <param name="user">The user</param>
         /// <param name="systemKeyword">The system keyword</param>
         /// <param name="comment">The activity comment</param>

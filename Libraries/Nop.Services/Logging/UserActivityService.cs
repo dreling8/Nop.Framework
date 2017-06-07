@@ -189,7 +189,7 @@ namespace Nop.Services.Logging
 
             return _activityLogTypeRepository.GetById(activityLogTypeId);
         }
-
+         
         /// <summary>
         /// Inserts an activity log item
         /// </summary>
@@ -202,6 +202,17 @@ namespace Nop.Services.Logging
             return InsertActivity(_workContext.CurrentUser, systemKeyword, comment, commentParams);
         }
 
+        /// <summary>
+        /// Inserts an activity log item
+        /// </summary>
+        /// <param name="logTypeEnum">The activity log type enum</param>
+        /// <param name="comment">The activity comment</param>
+        /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
+        /// <returns>Activity log item</returns>
+        public virtual ActivityLog InsertActivity(ActivityLogTypeEnum logTypeEnum, string comment, params object[] commentParams)
+        {
+            return InsertActivity(_workContext.CurrentUser, logTypeEnum.ToString(), comment, commentParams);
+        }
 
         /// <summary>
         /// Inserts an activity log item
@@ -224,12 +235,10 @@ namespace Nop.Services.Logging
             comment = CommonHelper.EnsureNotNull(comment);
             comment = string.Format(comment, commentParams);
             comment = CommonHelper.EnsureMaximumLength(comment, 4000);
-
-            
-
+             
             var activity = new ActivityLog();
             activity.ActivityLogTypeId = activityType.Id;
-            activity.User = user;
+            activity.UserId = user.Id;
             activity.Comment = comment;
             activity.CreatedOnUtc = DateTime.UtcNow;
             activity.IpAddress = _webHelper.GetCurrentIpAddress();

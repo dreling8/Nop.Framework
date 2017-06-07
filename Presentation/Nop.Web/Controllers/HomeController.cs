@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Nop.Core.Infrastructure;
-using Nop.Domain.Logging; 
+using Nop.Domain.Logging;
+using Nop.Domain.Users;
 using Nop.Services.Logging; 
 
 namespace Nop.Web.Controllers
@@ -32,8 +33,16 @@ namespace Nop.Web.Controllers
 
         private void TestCommonMoudle()
         {
+            var user = new User()
+            { 
+                Username = "adfsdf",
+                UserGuid = Guid.NewGuid(),
+                CreatedOnUtc = DateTime.UtcNow,
+                LastActivityDateUtc = DateTime.UtcNow,
+            };
+
             _logger.InsertLog(LogLevel.Information, "index visit");
-            _userActivityService.InsertActivity("AddUser", "添加用户{0},{1}", new string[2] { "aaaa", "bbb" });
+            _userActivityService.InsertActivity(ActivityLogTypeEnum.AddUser, "添加用户{0},{1}", new string[2] { "aaaa", "bbb" }); 
         }
 
     }

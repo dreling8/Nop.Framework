@@ -143,8 +143,7 @@ namespace Nop.Web.Framework
             get
             {
                 return new User()
-                {
-                    Id = 1,
+                { 
                     Username = "Guest",
                     UserGuid = Guid.NewGuid(),
                     CreatedOnUtc =  DateTime.UtcNow,
