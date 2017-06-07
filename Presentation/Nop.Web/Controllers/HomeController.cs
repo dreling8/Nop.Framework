@@ -37,7 +37,7 @@ namespace Nop.Web.Controllers
 
         private void TestSettings()
         {
-            var s = _commonSettings.IgnoreLogWordlist;
+            var s = _commonSettings.IgnoreLogWordlist; 
         }
 
         private void TestLogger()
