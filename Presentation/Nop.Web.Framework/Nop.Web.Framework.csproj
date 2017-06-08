@@ -133,6 +133,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyRegistrar.cs" />
+    <Compile Include="Localization\ILocalizedModel.cs" />
+    <Compile Include="Localization\ILocalizedModelLocal.cs" />
+    <Compile Include="Localization\LocalizedRoute.cs" />
+    <Compile Include="Localization\LocalizedRouteExtensions.cs" />
+    <Compile Include="Localization\LocalizedString.cs" />
+    <Compile Include="Localization\LocalizedUrlExtenstions.cs" />
+    <Compile Include="Localization\Localizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebWorkContext.cs" />
   </ItemGroup>

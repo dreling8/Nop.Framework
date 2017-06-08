@@ -1,5 +1,6 @@
 ﻿ 
 
+using Nop.Domain.Localization;
 using Nop.Domain.Users;
 
 namespace Nop.Core
@@ -17,7 +18,7 @@ namespace Nop.Core
         /// <summary>
         /// Get or set current user working language
         /// </summary>
-        //Language WorkingLanguage { get; set; }
+        Language WorkingLanguage { get; set; }
          
         /// <summary>
         /// Get or set value indicating whether we're in admin area

@@ -147,9 +147,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\GenericAttributeExtensions.cs" />
+    <Compile Include="Common\GenericAttributeService.cs" />
+    <Compile Include="Common\IGenericAttributeService.cs" />
     <Compile Include="Configuration\ISettingService.cs" />
     <Compile Include="Configuration\SettingExtensions.cs" />
     <Compile Include="Configuration\SettingService.cs" />
+    <Compile Include="Localization\ILanguageService.cs" />
+    <Compile Include="Localization\ILocalizationService.cs" />
+    <Compile Include="Localization\ILocalizedEntityService.cs" />
+    <Compile Include="Localization\LanguageService.cs" />
+    <Compile Include="Localization\LocalizationExtensions.cs" />
+    <Compile Include="Localization\LocalizationService.cs" />
+    <Compile Include="Localization\LocalizedEntityService.cs" />
     <Compile Include="Logging\UserActivityService.cs" />
     <Compile Include="Logging\DefaultLogger.cs" />
     <Compile Include="Logging\IUserActivityService.cs" />

@@ -44,10 +44,15 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Common\CommonSettings.cs" />
     <Compile Include="Common\FulltextSearchMode.cs" />
+    <Compile Include="Common\GenericAttribute.cs" />
     <Compile Include="Configuration\ISettings.cs" />
     <Compile Include="Configuration\Setting.cs" />
     <Compile Include="Localization\ILocalizedEntity.cs" />
     <Compile Include="Localization\ILocalizedEnum.cs" />
+    <Compile Include="Localization\Language.cs" />
+    <Compile Include="Localization\LocaleStringResource.cs" />
+    <Compile Include="Localization\LocalizationSettings.cs" />
+    <Compile Include="Localization\LocalizedProperty.cs" />
     <Compile Include="Logging\ActivityLog.cs" />
     <Compile Include="Logging\ActivityLogTypeEnum.cs" />
     <Compile Include="Logging\ActivityLogType.cs" />
@@ -56,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\PermissionRecord.cs" />
     <Compile Include="Users\ExternalAuthenticationRecord.cs" />
+    <Compile Include="Users\SystemUserAttributeNames.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserRole.cs" />
   </ItemGroup>

@@ -67,7 +67,11 @@
     <Compile Include="Initializers\DropCreateCeDatabaseAlways.cs" />
     <Compile Include="Initializers\DropCreateCeDatabaseIfModelChanges.cs" />
     <Compile Include="Initializers\SqlCeInitializer.cs" />
+    <Compile Include="Mapping\Common\GenericAttributeMap.cs" />
     <Compile Include="Mapping\Configuration\SettingMap.cs" />
+    <Compile Include="Mapping\Localization\LanguageMap.cs" />
+    <Compile Include="Mapping\Localization\LocaleStringResourceMap.cs" />
+    <Compile Include="Mapping\Localization\LocalizedPropertyMap.cs" />
     <Compile Include="Mapping\Logging\ActivityLogMap.cs" />
     <Compile Include="Mapping\Logging\ActivityLogTypeMap.cs" />
     <Compile Include="Mapping\Logging\LogMap.cs" />

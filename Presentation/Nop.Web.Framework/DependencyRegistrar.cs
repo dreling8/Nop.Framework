@@ -16,7 +16,9 @@ using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;
 using Nop.Domain.Configuration;
+using Nop.Services.Common;
 using Nop.Services.Configuration;
+using Nop.Services.Localization;
 using Nop.Services.Logging; 
 
 namespace Nop.Web.Framework
@@ -105,10 +107,12 @@ namespace Nop.Web.Framework
             // 注入Service及接口
             //builder.RegisterAssemblyTypes(typeof(TestService).Assembly)
             //        .AsImplementedInterfaces()
-            //        .InstancePerLifetimeScope();
-
+            //        .InstancePerLifetimeScope(); 
             builder.RegisterType<UserActivityService>().As<IUserActivityService>().InstancePerLifetimeScope();
-             
+            builder.RegisterType<GenericAttributeService>().As<IGenericAttributeService>().InstancePerLifetimeScope();
+            builder.RegisterType<LanguageService>().As<ILanguageService>().InstancePerLifetimeScope();
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().InstancePerLifetimeScope(); 
+            builder.RegisterType<LocalizedEntityService>().As<ILocalizedEntityService>().InstancePerLifetimeScope();
 
             //use static cache (between HTTP requests)
             builder.RegisterType<SettingService>().As<ISettingService>()
