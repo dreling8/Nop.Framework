@@ -153,6 +153,12 @@
     <Compile Include="Configuration\ISettingService.cs" />
     <Compile Include="Configuration\SettingExtensions.cs" />
     <Compile Include="Configuration\SettingService.cs" />
+    <Compile Include="Events\EventPublisher.cs" />
+    <Compile Include="Events\EventPublisherExtensions.cs" />
+    <Compile Include="Events\IConsumer.cs" />
+    <Compile Include="Events\IEventPublisher.cs" />
+    <Compile Include="Events\ISubscriptionService.cs" />
+    <Compile Include="Events\SubscriptionService.cs" />
     <Compile Include="Localization\ILanguageService.cs" />
     <Compile Include="Localization\ILocalizationService.cs" />
     <Compile Include="Localization\ILocalizedEntityService.cs" />
@@ -182,16 +188,14 @@
     <Compile Include="Users\CustomerAttributeParser.cs" />
     <Compile Include="Users\CustomerAttributeService.cs" />
     <Compile Include="Users\CustomerExtensions.cs" />
-    <Compile Include="Users\CustomerRegistrationRequest.cs" />
-    <Compile Include="Users\CustomerRegistrationResult.cs" />
+    <Compile Include="Users\UserRegistrationRequest.cs" />
+    <Compile Include="Users\UserRegistrationResult.cs" />
     <Compile Include="Users\CustomerRegistrationService.cs" />
-    <Compile Include="Users\CustomerReportService.cs" />
     <Compile Include="Users\CustomerService.cs" />
     <Compile Include="Users\ICustomerAttributeFormatter.cs" />
     <Compile Include="Users\ICustomerAttributeParser.cs" />
     <Compile Include="Users\ICustomerAttributeService.cs" />
     <Compile Include="Users\ICustomerRegistrationService.cs" />
-    <Compile Include="Users\ICustomerReportService.cs" />
     <Compile Include="Users\ICustomerService.cs" />
   </ItemGroup>
   <ItemGroup>
