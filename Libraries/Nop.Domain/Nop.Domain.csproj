@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Common\AttributeControlType.cs" />
     <Compile Include="Common\CommonSettings.cs" />
     <Compile Include="Common\FulltextSearchMode.cs" />
     <Compile Include="Common\GenericAttribute.cs" />
@@ -60,7 +61,15 @@
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\PermissionRecord.cs" />
+    <Compile Include="Security\SecuritySettings.cs" />
+    <Compile Include="Users\UserPassword.cs" />
+    <Compile Include="Users\UserNameFormat.cs" />
+    <Compile Include="Users\UserRegistrationType.cs" />
+    <Compile Include="Users\UserSettings.cs" />
+    <Compile Include="Users\UserAttribute.cs" />
+    <Compile Include="Users\UserAttributeValue.cs" />
     <Compile Include="Users\ExternalAuthenticationRecord.cs" />
+    <Compile Include="Users\PasswordFormat.cs" />
     <Compile Include="Users\SystemUserAttributeNames.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserRole.cs" />

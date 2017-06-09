@@ -30,6 +30,10 @@ namespace Nop.Domain.Common
         /// Gets or sets ignore words (phrases) to be ignored when logging errors/messages
         /// </summary>
         public List<string> IgnoreLogWordlist { get; set; }
-         
+
+
+        public bool BbcodeEditorOpenLinksInNewWindow { get; set; }
+
+
     }
 }
