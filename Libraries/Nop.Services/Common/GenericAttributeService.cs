@@ -7,7 +7,8 @@ using Nop.Core.Data;
 using Nop.Core.Domain.Common;
 using Nop.Data;
 using Nop.Domain;
-using Nop.Domain.Common; 
+using Nop.Domain.Common;
+using Nop.Services.Events;
 
 namespace Nop.Services.Common
 {
@@ -36,7 +37,7 @@ namespace Nop.Services.Common
 
         private readonly IRepository<GenericAttribute> _genericAttributeRepository;
         private readonly ICacheManager _cacheManager;
-        //private readonly IEventPublisher _eventPublisher;
+        private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
@@ -50,13 +51,13 @@ namespace Nop.Services.Common
         /// <param name="eventPublisher">Event published</param>
         public GenericAttributeService(
             ICacheManager cacheManager,
-            //IEventPublisher eventPublisher,
+            IEventPublisher eventPublisher,
             IRepository<GenericAttribute> genericAttributeRepository)
        
         {
             this._cacheManager = cacheManager;
             this._genericAttributeRepository = genericAttributeRepository;
-            //this._eventPublisher = eventPublisher;
+            this._eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -78,7 +79,7 @@ namespace Nop.Services.Common
             _cacheManager.RemoveByPattern(GENERICATTRIBUTE_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityDeleted(attribute);
+            _eventPublisher.EntityDeleted(attribute);
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace Nop.Services.Common
             //event notification
             foreach (var attribute in attributes)
             {
-                //_eventPublisher.EntityDeleted(attribute);
+                _eventPublisher.EntityDeleted(attribute);
             }
         }
 
@@ -130,7 +131,7 @@ namespace Nop.Services.Common
             _cacheManager.RemoveByPattern(GENERICATTRIBUTE_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityInserted(attribute);
+           _eventPublisher.EntityInserted(attribute);
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace Nop.Services.Common
             _cacheManager.RemoveByPattern(GENERICATTRIBUTE_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityUpdated(attribute);
+            _eventPublisher.EntityUpdated(attribute);
         }
 
         /// <summary>

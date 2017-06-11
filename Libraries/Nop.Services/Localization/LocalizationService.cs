@@ -11,7 +11,8 @@ using Nop.Core.Data;
 using Nop.Core.Domain.Common;
 using Nop.Data;
 using Nop.Domain.Common;
-using Nop.Domain.Localization; 
+using Nop.Domain.Localization;
+using Nop.Services.Events;
 using Nop.Services.Logging;
 
 namespace Nop.Services.Localization
@@ -56,7 +57,7 @@ namespace Nop.Services.Localization
         private readonly IDbContext _dbContext;
         private readonly CommonSettings _commonSettings;
         private readonly LocalizationSettings _localizationSettings;
-        //private readonly IEventPublisher _eventPublisher;
+        private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
@@ -82,7 +83,7 @@ namespace Nop.Services.Localization
             IDataProvider dataProvider, 
             IDbContext dbContext, 
             CommonSettings commonSettings,
-            //IEventPublisher eventPublisher,
+            IEventPublisher eventPublisher,
             LocalizationSettings localizationSettings)
         {
             this._cacheManager = cacheManager;
@@ -94,7 +95,7 @@ namespace Nop.Services.Localization
             this._dbContext = dbContext;
             this._commonSettings = commonSettings;
             this._localizationSettings = localizationSettings;
-            //this._eventPublisher = eventPublisher;
+            this._eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -116,7 +117,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LOCALSTRINGRESOURCES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityDeleted(localeStringResource);
+            _eventPublisher.EntityDeleted(localeStringResource);
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LOCALSTRINGRESOURCES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityInserted(localeStringResource);
+            _eventPublisher.EntityInserted(localeStringResource);
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LOCALSTRINGRESOURCES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityUpdated(localeStringResource);
+            _eventPublisher.EntityUpdated(localeStringResource);
         }
 
         /// <summary>

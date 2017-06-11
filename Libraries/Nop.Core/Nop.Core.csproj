@@ -132,7 +132,6 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="ComponentModel\GenericListTypeConverter.cs" />
     <Compile Include="Configuration\NopConfig.cs" />
-    <Compile Include="Domain\StoreInformationSettings.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Infrastructure\IStartupTask.cs" />
     <Compile Include="IWebHelper.cs" />

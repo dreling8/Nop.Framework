@@ -18,8 +18,10 @@ using Nop.Data;
 using Nop.Domain.Configuration;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
+using Nop.Services.Events;
 using Nop.Services.Localization;
-using Nop.Services.Logging; 
+using Nop.Services.Logging;
+using Nop.Services.Users;
 
 namespace Nop.Web.Framework
 {
@@ -114,11 +116,35 @@ namespace Nop.Web.Framework
             builder.RegisterType<LocalizationService>().As<ILocalizationService>().InstancePerLifetimeScope(); 
             builder.RegisterType<LocalizedEntityService>().As<ILocalizedEntityService>().InstancePerLifetimeScope();
 
+
+            builder.RegisterType<UserAttributeFormatter>().As<IUserAttributeFormatter>().InstancePerLifetimeScope();
+            builder.RegisterType<UserAttributeParser>().As<IUserAttributeParser>().InstancePerLifetimeScope();
+            builder.RegisterType<UserAttributeService>().As<IUserAttributeService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserRegistrationService>().As<IUserRegistrationService>().InstancePerLifetimeScope();
+            //builder.RegisterType<UserReportService>().As<IUserReportService>().InstancePerLifetimeScope();
+
+
             //use static cache (between HTTP requests)
             builder.RegisterType<SettingService>().As<ISettingService>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"))
                 .InstancePerLifetimeScope();
             builder.RegisterSource(new SettingsSource());
+
+            //Register event consumers
+            var consumers = typeFinder.FindClassesOfType(typeof(IConsumer<>)).ToList();
+            foreach (var consumer in consumers)
+            {
+                builder.RegisterType(consumer)
+                    .As(consumer.FindInterfaces((type, criteria) =>
+                    {
+                        var isMatch = type.IsGenericType && ((Type)criteria).IsAssignableFrom(type.GetGenericTypeDefinition());
+                        return isMatch;
+                    }, typeof(IConsumer<>)))
+                    .InstancePerLifetimeScope();
+            }
+            builder.RegisterType<EventPublisher>().As<IEventPublisher>().SingleInstance();
+            builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().SingleInstance();
 
         }
 

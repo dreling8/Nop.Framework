@@ -7,7 +7,7 @@ using Nop.Domain.Users;
 namespace Nop.Services.Logging
 {
     /// <summary>
-    /// Customer activity service interface
+    /// User activity service interface
     /// </summary>
     public partial interface IUserActivityService
     {
@@ -79,16 +79,16 @@ namespace Nop.Services.Logging
         /// <summary>
         /// Gets all activity log items
         /// </summary>
-        /// <param name="createdOnFrom">Log item creation from; null to load all customers</param>
-        /// <param name="createdOnTo">Log item creation to; null to load all customers</param>
-        /// <param name="customerId">Customer identifier; null to load all customers</param>
+        /// <param name="createdOnFrom">Log item creation from; null to load all users</param>
+        /// <param name="createdOnTo">Log item creation to; null to load all users</param>
+        /// <param name="userId">User identifier; null to load all users</param>
         /// <param name="activityLogTypeId">Activity log type identifier</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="ipAddress">IP address; null or empty to load all customers</param>
+        /// <param name="ipAddress">IP address; null or empty to load all users</param>
         /// <returns>Activity log items</returns>
         IPagedList<ActivityLog> GetAllActivities(DateTime? createdOnFrom = null,
-            DateTime? createdOnTo = null, int? customerId = null, int activityLogTypeId = 0,
+            DateTime? createdOnTo = null, int? userId = null, int activityLogTypeId = 0,
             int pageIndex = 0, int pageSize = int.MaxValue, string ipAddress = null);
 
         /// <summary>

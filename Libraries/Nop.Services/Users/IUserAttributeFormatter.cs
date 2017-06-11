@@ -2,7 +2,7 @@
 namespace Nop.Services.Users
 {
     /// <summary>
-    /// Customer attribute helper
+    /// User attribute helper
     /// </summary>
     public partial interface IUserAttributeFormatter
     {

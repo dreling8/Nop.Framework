@@ -11,6 +11,7 @@ using Nop.Data;
 using Nop.Domain.Common;
 using Nop.Domain.Users;
 using Nop.Services.Common;
+using Nop.Services.Events;
 
 namespace Nop.Services.Users
 {
@@ -27,34 +28,34 @@ namespace Nop.Services.Users
         /// <remarks>
         /// {0} : show hidden records?
         /// </remarks>
-        private const string CUSTOMERROLES_ALL_KEY = "Nop.customerrole.all-{0}";
+        private const string CUSTOMERROLES_ALL_KEY = "Nop.userrole.all-{0}";
         /// <summary>
         /// Key for caching
         /// </summary>
         /// <remarks>
         /// {0} : system name
         /// </remarks>
-        private const string CUSTOMERROLES_BY_SYSTEMNAME_KEY = "Nop.customerrole.systemname-{0}";
+        private const string CUSTOMERROLES_BY_SYSTEMNAME_KEY = "Nop.userrole.systemname-{0}";
         /// <summary>
         /// Key pattern to clear cache
         /// </summary>
-        private const string CUSTOMERROLES_PATTERN_KEY = "Nop.customerrole.";
+        private const string CUSTOMERROLES_PATTERN_KEY = "Nop.userrole.";
 
         #endregion
 
         #region Fields
 
-        private readonly IRepository<User> _customerRepository;
-        private readonly IRepository<UserPassword> _customerPasswordRepository;
-        private readonly IRepository<UserRole> _customerRoleRepository;
+        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<UserPassword> _userPasswordRepository;
+        private readonly IRepository<UserRole> _userRoleRepository;
         private readonly IRepository<GenericAttribute> _gaRepository;
        
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IDataProvider _dataProvider;
         private readonly IDbContext _dbContext;
         private readonly ICacheManager _cacheManager;
-        //Userprivate readonly IEventPublisher _eventPublisher;
-        private readonly UserSettings _customerSettings;
+        private readonly IEventPublisher _eventPublisher;
+        private readonly UserSettings _userSettings;
         private readonly CommonSettings _commonSettings;
 
         #endregion
@@ -62,27 +63,27 @@ namespace Nop.Services.Users
         #region Ctor
 
         public UserService(ICacheManager cacheManager,
-            IRepository<User> customerRepository,
-            IRepository<UserPassword> customerPasswordRepository,
-            IRepository<UserRole> customerRoleRepository,
+            IRepository<User> userRepository,
+            IRepository<UserPassword> userPasswordRepository,
+            IRepository<UserRole> userRoleRepository,
             IRepository<GenericAttribute> gaRepository, 
             IGenericAttributeService genericAttributeService,
             IDataProvider dataProvider,
             IDbContext dbContext,
-            // IEventPublisher eventPublisher, 
-            UserSettings customerSettings,
+            IEventPublisher eventPublisher, 
+            UserSettings userSettings,
             CommonSettings commonSettings)
         {
             this._cacheManager = cacheManager;
-            this._customerRepository = customerRepository;
-            this._customerPasswordRepository = customerPasswordRepository;
-            this._customerRoleRepository = customerRoleRepository;
+            this._userRepository = userRepository;
+            this._userPasswordRepository = userPasswordRepository;
+            this._userRoleRepository = userRoleRepository;
             this._gaRepository = gaRepository; 
             this._genericAttributeService = genericAttributeService;
             this._dataProvider = dataProvider;
             this._dbContext = dbContext;
-            //this._eventPublisher = eventPublisher;
-            this._customerSettings = customerSettings;
+            this._eventPublisher = eventPublisher;
+            this._userSettings = userSettings;
             this._commonSettings = commonSettings;
         }
 
@@ -93,43 +94,43 @@ namespace Nop.Services.Users
         #region Users
 
         /// <summary>
-        /// Gets all customers
+        /// Gets all users
         /// </summary>
         /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
         /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
         /// <param name="affiliateId">Affiliate identifier</param>
         /// <param name="vendorId">Vendor identifier</param>
-        /// <param name="customerRoleIds">A list of customer role identifiers to filter by (at least one match); pass null or empty list in order to load all customers; </param>
-        /// <param name="email">Email; null to load all customers</param>
-        /// <param name="username">Username; null to load all customers</param>
-        /// <param name="firstName">First name; null to load all customers</param>
-        /// <param name="lastName">Last name; null to load all customers</param>
-        /// <param name="dayOfBirth">Day of birth; 0 to load all customers</param>
-        /// <param name="monthOfBirth">Month of birth; 0 to load all customers</param>
-        /// <param name="company">Company; null to load all customers</param>
-        /// <param name="phone">Phone; null to load all customers</param>
-        /// <param name="zipPostalCode">Phone; null to load all customers</param>
-        /// <param name="ipAddress">IP address; null to load all customers</param> 
+        /// <param name="userRoleIds">A list of user role identifiers to filter by (at least one match); pass null or empty list in order to load all users; </param>
+        /// <param name="email">Email; null to load all users</param>
+        /// <param name="username">Username; null to load all users</param>
+        /// <param name="firstName">First name; null to load all users</param>
+        /// <param name="lastName">Last name; null to load all users</param>
+        /// <param name="dayOfBirth">Day of birth; 0 to load all users</param>
+        /// <param name="monthOfBirth">Month of birth; 0 to load all users</param>
+        /// <param name="company">Company; null to load all users</param>
+        /// <param name="phone">Phone; null to load all users</param>
+        /// <param name="zipPostalCode">Phone; null to load all users</param>
+        /// <param name="ipAddress">IP address; null to load all users</param> 
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>Users</returns>
         public virtual IPagedList<User> GetAllUsers(DateTime? createdFromUtc = null,
             DateTime? createdToUtc = null, int affiliateId = 0, int vendorId = 0,
-            int[] customerRoleIds = null, string email = null, string username = null,
+            int[] userRoleIds = null, string email = null, string username = null,
             string firstName = null, string lastName = null,
             int dayOfBirth = 0, int monthOfBirth = 0,
             string company = null, string phone = null, string zipPostalCode = null,
             string ipAddress = null,  
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var query = _customerRepository.Table;
+            var query = _userRepository.Table;
             if (createdFromUtc.HasValue)
                 query = query.Where(c => createdFromUtc.Value <= c.CreatedOnUtc);
             if (createdToUtc.HasValue)
                 query = query.Where(c => createdToUtc.Value >= c.CreatedOnUtc);  
             query = query.Where(c => !c.Deleted);
-            if (customerRoleIds != null && customerRoleIds.Length > 0)
-                query = query.Where(c => c.UserRoles.Select(cr => cr.Id).Intersect(customerRoleIds).Any());
+            if (userRoleIds != null && userRoleIds.Length > 0)
+                query = query.Where(c => c.UserRoles.Select(cr => cr.Id).Intersect(userRoleIds).Any());
             if (!String.IsNullOrWhiteSpace(email))
                 query = query.Where(c => c.Email.Contains(email));
             if (!String.IsNullOrWhiteSpace(username))
@@ -137,20 +138,20 @@ namespace Nop.Services.Users
             if (!String.IsNullOrWhiteSpace(firstName))
             {
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.FirstName &&
                         z.Attribute.Value.Contains(firstName)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             if (!String.IsNullOrWhiteSpace(lastName))
             {
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.LastName &&
                         z.Attribute.Value.Contains(lastName)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             //date of birth is stored as a string into database.
             //we also know that date of birth is stored in the following format YYYY-MM-DD (for example, 1983-02-18).
@@ -166,11 +167,11 @@ namespace Nop.Services.Users
                 //z.Attribute.Value.Length - dateOfBirthStr.Length = 5
                 //dateOfBirthStr.Length = 5
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.DateOfBirth &&
                         z.Attribute.Value.Substring(5, 5) == dateOfBirthStr))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             else if (dayOfBirth > 0)
             {
@@ -183,52 +184,52 @@ namespace Nop.Services.Users
                 //z.Attribute.Value.Length - dateOfBirthStr.Length = 8
                 //dateOfBirthStr.Length = 2
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.DateOfBirth &&
                         z.Attribute.Value.Substring(8, 2) == dateOfBirthStr))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             else if (monthOfBirth > 0)
             {
                 //only month is specified
                 string dateOfBirthStr = "-" + monthOfBirth.ToString("00", CultureInfo.InvariantCulture) + "-";
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.DateOfBirth &&
                         z.Attribute.Value.Contains(dateOfBirthStr)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             //search by company
             if (!String.IsNullOrWhiteSpace(company))
             {
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.Company &&
                         z.Attribute.Value.Contains(company)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             //search by phone
             if (!String.IsNullOrWhiteSpace(phone))
             {
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.Phone &&
                         z.Attribute.Value.Contains(phone)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
             //search by zip
             if (!String.IsNullOrWhiteSpace(zipPostalCode))
             {
                 query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
+                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { User = x, Attribute = y })
+                    .Where((z => z.Attribute.KeyGroup == "User" &&
                         z.Attribute.Key == SystemUserAttributeNames.ZipPostalCode &&
                         z.Attribute.Value.Contains(zipPostalCode)))
-                    .Select(z => z.Customer);
+                    .Select(z => z.User);
             }
 
             //search by IpAddress
@@ -239,118 +240,118 @@ namespace Nop.Services.Users
              
             query = query.OrderByDescending(c => c.CreatedOnUtc);
 
-            var customers = new PagedList<User>(query, pageIndex, pageSize);
-            return customers;
+            var users = new PagedList<User>(query, pageIndex, pageSize);
+            return users;
         }
 
         /// <summary>
-        /// Gets online customers
+        /// Gets online users
         /// </summary>
-        /// <param name="lastActivityFromUtc">Customer last activity date (from)</param>
-        /// <param name="customerRoleIds">A list of customer role identifiers to filter by (at least one match); pass null or empty list in order to load all customers; </param>
+        /// <param name="lastActivityFromUtc">Users last activity date (from)</param>
+        /// <param name="userRoleIds">A list of user role identifiers to filter by (at least one match); pass null or empty list in order to load all users; </param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <returns>Customers</returns>
+        /// <returns>Users</returns>
         public virtual IPagedList<User> GetOnlineUsers(DateTime lastActivityFromUtc,
-            int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue)
+            int[] userRoleIds, int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var query = _customerRepository.Table;
+            var query = _userRepository.Table;
             query = query.Where(c => lastActivityFromUtc <= c.LastActivityDateUtc);
             query = query.Where(c => !c.Deleted);
-            if (customerRoleIds != null && customerRoleIds.Length > 0)
-                query = query.Where(c => c.UserRoles.Select(cr => cr.Id).Intersect(customerRoleIds).Any());
+            if (userRoleIds != null && userRoleIds.Length > 0)
+                query = query.Where(c => c.UserRoles.Select(cr => cr.Id).Intersect(userRoleIds).Any());
             
             query = query.OrderByDescending(c => c.LastActivityDateUtc);
-            var customers = new PagedList<User>(query, pageIndex, pageSize);
-            return customers;
+            var users = new PagedList<User>(query, pageIndex, pageSize);
+            return users;
         }
 
         /// <summary>
-        /// Delete a customer
+        /// Delete a user
         /// </summary>
-        /// <param name="customer">Customer</param>
-        public virtual void DeleteUser(User customer)
+        /// <param name="user">Users</param>
+        public virtual void DeleteUser(User user)
         {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
+            if (user == null)
+                throw new ArgumentNullException("user");
 
-            if (customer.IsSystemAccount)
-                throw new NopException(string.Format("System customer account ({0}) could not be deleted", customer.SystemName));
+            if (user.IsSystemAccount)
+                throw new NopException(string.Format("System user account ({0}) could not be deleted", user.SystemName));
 
-            customer.Deleted = true;
+            user.Deleted = true;
 
-            if (_customerSettings.SuffixDeletedUsers)
+            if (_userSettings.SuffixDeletedUsers)
             {
-                if (!String.IsNullOrEmpty(customer.Email))
-                    customer.Email += "-DELETED";
-                if (!String.IsNullOrEmpty(customer.Username))
-                    customer.Username += "-DELETED";
+                if (!String.IsNullOrEmpty(user.Email))
+                    user.Email += "-DELETED";
+                if (!String.IsNullOrEmpty(user.Username))
+                    user.Username += "-DELETED";
             }
 
-            UpdateUser(customer);
+            UpdateUser(user);
 
             //event notification
-            //_eventPublisher.EntityDeleted(customer);
+            _eventPublisher.EntityDeleted(user);
         }
 
         /// <summary>
-        /// Gets a customer
+        /// Gets a user
         /// </summary>
-        /// <param name="customerId">User identifier</param>
-        /// <returns>A customer</returns>
-        public virtual User GetUserById(int customerId)
+        /// <param name="userId">User identifier</param>
+        /// <returns>A user</returns>
+        public virtual User GetUserById(int userId)
         {
-            if (customerId == 0)
+            if (userId == 0)
                 return null;
             
-            return _customerRepository.GetById(customerId);
+            return _userRepository.GetById(userId);
         }
 
         /// <summary>
-        /// Get customers by identifiers
+        /// Get users by identifiers
         /// </summary>
-        /// <param name="customerIds">User identifiers</param>
+        /// <param name="userIds">User identifiers</param>
         /// <returns>Users</returns>
-        public virtual IList<User> GetUsersByIds(int[] customerIds)
+        public virtual IList<User> GetUsersByIds(int[] userIds)
         {
-            if (customerIds == null || customerIds.Length == 0)
+            if (userIds == null || userIds.Length == 0)
                 return new List<User>();
 
-            var query = from c in _customerRepository.Table
-                        where customerIds.Contains(c.Id) && !c.Deleted
+            var query = from c in _userRepository.Table
+                        where userIds.Contains(c.Id) && !c.Deleted
                         select c;
-            var customers = query.ToList();
+            var users = query.ToList();
             //sort by passed identifiers
-            var sortedCustomers = new List<User>();
-            foreach (int id in customerIds)
+            var sortedUsers = new List<User>();
+            foreach (int id in userIds)
             {
-                var customer = customers.Find(x => x.Id == id);
-                if (customer != null)
-                    sortedCustomers.Add(customer);
+                var user = users.Find(x => x.Id == id);
+                if (user != null)
+                    sortedUsers.Add(user);
             }
-            return sortedCustomers;
+            return sortedUsers;
         }
 
         /// <summary>
-        /// Gets a customer by GUID
+        /// Gets a user by GUID
         /// </summary>
-        /// <param name="customerGuid">User GUID</param>
-        /// <returns>A customer</returns>
-        public virtual User GetUserByGuid(Guid customerGuid)
+        /// <param name="userGuid">User GUID</param>
+        /// <returns>A user</returns>
+        public virtual User GetUserByGuid(Guid userGuid)
         {
-            if (customerGuid == Guid.Empty)
+            if (userGuid == Guid.Empty)
                 return null;
 
-            var query = from c in _customerRepository.Table
-                        where c.UserGuid == customerGuid
+            var query = from c in _userRepository.Table
+                        where c.UserGuid == userGuid
                         orderby c.Id
                         select c;
-            var customer = query.FirstOrDefault();
-            return customer;
+            var user = query.FirstOrDefault();
+            return user;
         }
 
         /// <summary>
-        /// Get customer by email
+        /// Get user by email
         /// </summary>
         /// <param name="email">Email</param>
         /// <returns>User</returns>
@@ -359,16 +360,16 @@ namespace Nop.Services.Users
             if (string.IsNullOrWhiteSpace(email))
                 return null;
 
-            var query = from c in _customerRepository.Table
+            var query = from c in _userRepository.Table
                         orderby c.Id
                         where c.Email == email
                         select c;
-            var customer = query.FirstOrDefault();
-            return customer;
+            var user = query.FirstOrDefault();
+            return user;
         }
 
         /// <summary>
-        /// Get customer by system name
+        /// Get user by system name
         /// </summary>
         /// <param name="systemName">System name</param>
         /// <returns>User</returns>
@@ -377,16 +378,16 @@ namespace Nop.Services.Users
             if (string.IsNullOrWhiteSpace(systemName))
                 return null;
 
-            var query = from c in _customerRepository.Table
+            var query = from c in _userRepository.Table
                         orderby c.Id
                         where c.SystemName == systemName
                         select c;
-            var customer = query.FirstOrDefault();
-            return customer;
+            var user = query.FirstOrDefault();
+            return user;
         }
 
         /// <summary>
-        /// Get customer by username
+        /// Get user by username
         /// </summary>
         /// <param name="username">Username</param>
         /// <returns>User</returns>
@@ -395,21 +396,21 @@ namespace Nop.Services.Users
             if (string.IsNullOrWhiteSpace(username))
                 return null;
 
-            var query = from c in _customerRepository.Table
+            var query = from c in _userRepository.Table
                         orderby c.Id
                         where c.Username == username
                         select c;
-            var customer = query.FirstOrDefault();
-            return customer;
+            var user = query.FirstOrDefault();
+            return user;
         }
 
         /// <summary>
-        /// Insert a guest customer
+        /// Insert a guest user
         /// </summary>
         /// <returns>User</returns>
         public virtual User InsertGuestUser()
         {
-            var customer = new User
+            var user = new User
             {
                 UserGuid = Guid.NewGuid(),
                 Active = true,
@@ -421,76 +422,76 @@ namespace Nop.Services.Users
             var guestRole = GetUserRoleBySystemName(SystemUserRoleNames.Guests);
             if (guestRole == null)
                 throw new NopException("'Guests' role could not be loaded");
-            customer.UserRoles.Add(guestRole);
+            user.UserRoles.Add(guestRole);
 
-            _customerRepository.Insert(customer);
+            _userRepository.Insert(user);
 
-            return customer;
+            return user;
         }
 
         /// <summary>
-        /// Insert a customer
+        /// Insert a user
         /// </summary>
-        /// <param name="customer">User</param>
-        public virtual void InsertUser(User customer)
+        /// <param name="user">User</param>
+        public virtual void InsertUser(User user)
         {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
+            if (user == null)
+                throw new ArgumentNullException("user");
 
-            _customerRepository.Insert(customer);
+            _userRepository.Insert(user);
 
             //event notification
-           // _eventPublisher.EntityInserted(customer);
+           _eventPublisher.EntityInserted(user);
         }
 
         /// <summary>
-        /// Updates the customer
+        /// Updates the user
         /// </summary>
-        /// <param name="customer">User</param>
-        public virtual void UpdateUser(User customer)
+        /// <param name="user">User</param>
+        public virtual void UpdateUser(User user)
         {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
+            if (user == null)
+                throw new ArgumentNullException("user");
 
-            _customerRepository.Update(customer);
+            _userRepository.Update(user);
 
             //event notification
-            //_eventPublisher.EntityUpdated(customer);
+            _eventPublisher.EntityUpdated(user);
         }
 
         /// <summary>
         /// Reset data required for checkout
         /// </summary>
-        /// <param name="customer">User</param>
+        /// <param name="user">User</param>
         /// <param name="storeId">Store identifier</param>
         /// <param name="clearCouponCodes">A value indicating whether to clear coupon code</param>
         /// <param name="clearCheckoutAttributes">A value indicating whether to clear selected checkout attributes</param>
         /// <param name="clearRewardPoints">A value indicating whether to clear "Use reward points" flag</param>
         /// <param name="clearShippingMethod">A value indicating whether to clear selected shipping method</param>
         /// <param name="clearPaymentMethod">A value indicating whether to clear selected payment method</param>
-        public virtual void ResetCheckoutData(User customer, int storeId,
+        public virtual void ResetCheckoutData(User user, int storeId,
             bool clearCouponCodes = false, bool clearCheckoutAttributes = false,
             bool clearRewardPoints = true, bool clearShippingMethod = true,
             bool clearPaymentMethod = true)
         {
-            if (customer == null)
+            if (user == null)
                 throw new ArgumentNullException();
             
               
             //clear reward points flag
             if (clearRewardPoints)
             {
-                _genericAttributeService.SaveAttribute(customer, SystemUserAttributeNames.UseRewardPointsDuringCheckout, false, storeId);
+                _genericAttributeService.SaveAttribute(user, SystemUserAttributeNames.UseRewardPointsDuringCheckout, false, storeId);
             }
 
            
             //clear selected payment method
             if (clearPaymentMethod)
             {
-                _genericAttributeService.SaveAttribute<string>(customer, SystemUserAttributeNames.SelectedPaymentMethod, null, storeId);
+                _genericAttributeService.SaveAttribute<string>(user, SystemUserAttributeNames.SelectedPaymentMethod, null, storeId);
             }
 
-            UpdateUser(customer);
+            UpdateUser(user);
         }
 
 
@@ -500,40 +501,40 @@ namespace Nop.Services.Users
         #region User roles
 
         /// <summary>
-        /// Delete a customer role
+        /// Delete a user role
         /// </summary>
-        /// <param name="customerRole">User role</param>
-        public virtual void DeleteUserRole(UserRole customerRole)
+        /// <param name="userRole">User role</param>
+        public virtual void DeleteUserRole(UserRole userRole)
         {
-            if (customerRole == null)
-                throw new ArgumentNullException("customerRole");
+            if (userRole == null)
+                throw new ArgumentNullException("userRole");
 
-            if (customerRole.IsSystemRole)
+            if (userRole.IsSystemRole)
                 throw new NopException("System role could not be deleted");
 
-            _customerRoleRepository.Delete(customerRole);
+            _userRoleRepository.Delete(userRole);
 
             _cacheManager.RemoveByPattern(CUSTOMERROLES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityDeleted(customerRole);
+            _eventPublisher.EntityDeleted(userRole);
         }
 
         /// <summary>
-        /// Gets a customer role
+        /// Gets a user role
         /// </summary>
-        /// <param name="customerRoleId">User role identifier</param>
+        /// <param name="userRoleId">User role identifier</param>
         /// <returns>User role</returns>
-        public virtual UserRole GetUserRoleById(int customerRoleId)
+        public virtual UserRole GetUserRoleById(int userRoleId)
         {
-            if (customerRoleId == 0)
+            if (userRoleId == 0)
                 return null;
 
-            return _customerRoleRepository.GetById(customerRoleId);
+            return _userRoleRepository.GetById(userRoleId);
         }
 
         /// <summary>
-        /// Gets a customer role
+        /// Gets a user role
         /// </summary>
         /// <param name="systemName">User role system name</param>
         /// <returns>User role</returns>
@@ -545,17 +546,17 @@ namespace Nop.Services.Users
             string key = string.Format(CUSTOMERROLES_BY_SYSTEMNAME_KEY, systemName);
             return _cacheManager.Get(key, () =>
             {
-                var query = from cr in _customerRoleRepository.Table
+                var query = from cr in _userRoleRepository.Table
                             orderby cr.Id
                             where cr.SystemName == systemName
                             select cr;
-                var customerRole = query.FirstOrDefault();
-                return customerRole;
+                var userRole = query.FirstOrDefault();
+                return userRole;
             });
         }
 
         /// <summary>
-        /// Gets all customer roles
+        /// Gets all user roles
         /// </summary>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>User roles</returns>
@@ -564,47 +565,47 @@ namespace Nop.Services.Users
             string key = string.Format(CUSTOMERROLES_ALL_KEY, showHidden);
             return _cacheManager.Get(key, () =>
             {
-                var query = from cr in _customerRoleRepository.Table
+                var query = from cr in _userRoleRepository.Table
                             orderby cr.Name
                             where showHidden || cr.Active
                             select cr;
-                var customerRoles = query.ToList();
-                return customerRoles;
+                var userRoles = query.ToList();
+                return userRoles;
             });
         }
 
         /// <summary>
-        /// Inserts a customer role
+        /// Inserts a user role
         /// </summary>
-        /// <param name="customerRole">User role</param>
-        public virtual void InsertUserRole(UserRole customerRole)
+        /// <param name="userRole">User role</param>
+        public virtual void InsertUserRole(UserRole userRole)
         {
-            if (customerRole == null)
+            if (userRole == null)
                 throw new ArgumentNullException("userRole");
 
-            _customerRoleRepository.Insert(customerRole);
+            _userRoleRepository.Insert(userRole);
 
             _cacheManager.RemoveByPattern(CUSTOMERROLES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityInserted(customerRole);
+            _eventPublisher.EntityInserted(userRole);
         }
 
         /// <summary>
-        /// Updates the customer role
+        /// Updates the user role
         /// </summary>
-        /// <param name="customerRole">User role</param>
-        public virtual void UpdateUserRole(UserRole customerRole)
+        /// <param name="userRole">User role</param>
+        public virtual void UpdateUserRole(UserRole userRole)
         {
-            if (customerRole == null)
-                throw new ArgumentNullException("customerRole");
+            if (userRole == null)
+                throw new ArgumentNullException("userRole");
 
-            _customerRoleRepository.Update(customerRole);
+            _userRoleRepository.Update(userRole);
 
             _cacheManager.RemoveByPattern(CUSTOMERROLES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityUpdated(customerRole);
+            _eventPublisher.EntityUpdated(userRole);
         }
 
         #endregion
@@ -612,20 +613,20 @@ namespace Nop.Services.Users
         #region User passwords
 
         /// <summary>
-        /// Gets customer passwords
+        /// Gets user passwords
         /// </summary>
-        /// <param name="customerId">User identifier; pass null to load all records</param>
+        /// <param name="userId">User identifier; pass null to load all records</param>
         /// <param name="passwordFormat">Password format; pass null to load all records</param>
         /// <param name="passwordsToReturn">Number of returning passwords; pass null to load all records</param>
-        /// <returns>List of customer passwords</returns>u
-        public virtual IList<UserPassword> GetUserPasswords(int? customerId = null, 
+        /// <returns>List of user passwords</returns>u
+        public virtual IList<UserPassword> GetUserPasswords(int? userId = null, 
             PasswordFormat? passwordFormat = null, int? passwordsToReturn = null)
         {
-            var query = _customerPasswordRepository.Table;
+            var query = _userPasswordRepository.Table;
 
-            //filter by customer
-            if (customerId.HasValue)
-                query = query.Where(password => password.UserId == customerId.Value);
+            //filter by user
+            if (userId.HasValue)
+                query = query.Where(password => password.UserId == userId.Value);
 
             //filter by password format
             if (passwordFormat.HasValue)
@@ -639,47 +640,47 @@ namespace Nop.Services.Users
         }
 
         /// <summary>
-        /// Get current customer password
+        /// Get current user password
         /// </summary>
-        /// <param name="customerId">User identifier</param>
+        /// <param name="userId">User identifier</param>
         /// <returns>User password</returns>
-        public virtual UserPassword GetCurrentPassword(int customerId)
+        public virtual UserPassword GetCurrentPassword(int userId)
         {
-            if (customerId == 0)
+            if (userId == 0)
                 return null;
 
             //return the latest password
-            return GetUserPasswords(customerId, passwordsToReturn: 1).FirstOrDefault();
+            return GetUserPasswords(userId, passwordsToReturn: 1).FirstOrDefault();
         }
 
         /// <summary>
-        /// Insert a customer password
+        /// Insert a user password
         /// </summary>
-        /// <param name="customerPassword">User password</param>
-        public virtual void InsertUserPassword(UserPassword customerPassword)
+        /// <param name="userPassword">User password</param>
+        public virtual void InsertUserPassword(UserPassword userPassword)
         {
-            if (customerPassword == null)
+            if (userPassword == null)
                 throw new ArgumentNullException("userPassword");
 
-            _customerPasswordRepository.Insert(customerPassword);
+            _userPasswordRepository.Insert(userPassword);
 
             //event notification
-            //_eventPublisher.EntityInserted(customerPassword);
+            _eventPublisher.EntityInserted(userPassword);
         }
 
         /// <summary>
-        /// Update a customer password
+        /// Update a user password
         /// </summary>
-        /// <param name="customerPassword">User password</param>
-        public virtual void UpdateUserPassword(UserPassword customerPassword)
+        /// <param name="userPassword">User password</param>
+        public virtual void UpdateUserPassword(UserPassword userPassword)
         {
-            if (customerPassword == null)
-                throw new ArgumentNullException("customerPassword");
+            if (userPassword == null)
+                throw new ArgumentNullException("userPassword");
 
-            _customerPasswordRepository.Update(customerPassword);
+            _userPasswordRepository.Update(userPassword);
 
             //event notification
-            //_eventPublisher.EntityUpdated(customerPassword);
+            _eventPublisher.EntityUpdated(userPassword);
         }
 
         #endregion

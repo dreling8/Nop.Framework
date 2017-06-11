@@ -20,7 +20,7 @@ namespace Nop.Domain.Users
         public static string VatNumber { get { return "VatNumber"; } }
         public static string VatNumberStatusId { get { return "VatNumberStatusId"; } }
         public static string TimeZoneId { get { return "TimeZoneId"; } }
-        public static string CustomCustomerAttributes { get { return "CustomCustomerAttributes"; } }
+        public static string CustomUserAttributes { get { return "CustomUserAttributes"; } }
 
         //Other attributes
         public static string DiscountCouponCode { get { return "DiscountCouponCode"; } }
@@ -33,7 +33,7 @@ namespace Nop.Domain.Users
         public static string AccountActivationToken { get { return "AccountActivationToken"; } }
         public static string EmailRevalidationToken { get { return "EmailRevalidationToken"; } }
         public static string LastVisitedPage { get { return "LastVisitedPage"; } }
-        public static string ImpersonatedCustomerId { get { return "ImpersonatedCustomerId"; } }
+        public static string ImpersonatedUserId { get { return "ImpersonatedUserId"; } }
         public static string AdminAreaStoreScopeConfiguration { get { return "AdminAreaStoreScopeConfiguration"; } }
 
 

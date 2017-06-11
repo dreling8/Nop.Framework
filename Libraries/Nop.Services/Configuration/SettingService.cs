@@ -7,7 +7,8 @@ using System.Reflection;
 using Nop.Core;
 using Nop.Core.Caching; 
 using Nop.Core.Data; 
-using Nop.Domain.Configuration; 
+using Nop.Domain.Configuration;
+using Nop.Services.Events;
 
 namespace Nop.Services.Configuration
 {
@@ -32,7 +33,7 @@ namespace Nop.Services.Configuration
         #region Fields
 
         private readonly IRepository<Setting> _settingRepository;
-        //private readonly IEventPublisher _eventPublisher;
+        private readonly IEventPublisher _eventPublisher;
         private readonly ICacheManager _cacheManager;
 
         #endregion
@@ -47,11 +48,11 @@ namespace Nop.Services.Configuration
         /// <param name="settingRepository">Setting repository</param>
         public SettingService(
             ICacheManager cacheManager, 
-            //IEventPublisher eventPublisher,
+            IEventPublisher eventPublisher,
             IRepository<Setting> settingRepository)
         {
             this._cacheManager = cacheManager;
-            //this._eventPublisher = eventPublisher;
+            this._eventPublisher = eventPublisher;
             this._settingRepository = settingRepository;
         }
 
@@ -139,7 +140,7 @@ namespace Nop.Services.Configuration
                 _cacheManager.RemoveByPattern(SETTINGS_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityInserted(setting);
+            _eventPublisher.EntityInserted(setting);
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace Nop.Services.Configuration
                 _cacheManager.RemoveByPattern(SETTINGS_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityUpdated(setting);
+            _eventPublisher.EntityUpdated(setting);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace Nop.Services.Configuration
             _cacheManager.RemoveByPattern(SETTINGS_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityDeleted(setting);
+            _eventPublisher.EntityDeleted(setting);
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace Nop.Services.Configuration
             //event notification
             foreach (var setting in settings)
             {
-                //_eventPublisher.EntityDeleted(setting);
+               _eventPublisher.EntityDeleted(setting);
             }
         }
 

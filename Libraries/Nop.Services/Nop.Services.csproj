@@ -180,23 +180,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\EncryptionService.cs" />
     <Compile Include="Security\IEncryptionService.cs" />
-    <Compile Include="Users\Cache\CustomerCacheEventConsumer.cs" />
+    <Compile Include="Users\Cache\UserCacheEventConsumer.cs" />
     <Compile Include="Users\ChangePasswordRequest.cs" />
     <Compile Include="Users\ChangePasswordResult.cs" />
-    <Compile Include="Users\CustomerAttributeExtensions.cs" />
-    <Compile Include="Users\CustomerAttributeFormatter.cs" />
-    <Compile Include="Users\CustomerAttributeParser.cs" />
-    <Compile Include="Users\CustomerAttributeService.cs" />
-    <Compile Include="Users\CustomerExtensions.cs" />
+    <Compile Include="Users\UserAttributeExtensions.cs" />
+    <Compile Include="Users\UserAttributeFormatter.cs" />
+    <Compile Include="Users\UserAttributeParser.cs" />
+    <Compile Include="Users\UserAttributeService.cs" />
+    <Compile Include="Users\UserExtensions.cs" />
+    <Compile Include="Users\Events.cs" />
     <Compile Include="Users\UserRegistrationRequest.cs" />
     <Compile Include="Users\UserRegistrationResult.cs" />
-    <Compile Include="Users\CustomerRegistrationService.cs" />
-    <Compile Include="Users\CustomerService.cs" />
-    <Compile Include="Users\ICustomerAttributeFormatter.cs" />
-    <Compile Include="Users\ICustomerAttributeParser.cs" />
-    <Compile Include="Users\ICustomerAttributeService.cs" />
-    <Compile Include="Users\ICustomerRegistrationService.cs" />
-    <Compile Include="Users\ICustomerService.cs" />
+    <Compile Include="Users\UserRegistrationService.cs" />
+    <Compile Include="Users\UserService.cs" />
+    <Compile Include="Users\IUserAttributeFormatter.cs" />
+    <Compile Include="Users\IUserAttributeParser.cs" />
+    <Compile Include="Users\IUserAttributeService.cs" />
+    <Compile Include="Users\IUserRegistrationService.cs" />
+    <Compile Include="Users\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nop.Core\Nop.Core.csproj">

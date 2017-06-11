@@ -47,7 +47,7 @@ namespace Nop.Services.Users
         {
             var result = new StringBuilder();
 
-            var attributes = _userAttributeParser.ParseCustomerAttributes(attributesXml);
+            var attributes = _userAttributeParser.ParseUserAttributes(attributesXml);
             for (int i = 0; i < attributes.Count; i++)
             {
                 var attribute = attributes[i];

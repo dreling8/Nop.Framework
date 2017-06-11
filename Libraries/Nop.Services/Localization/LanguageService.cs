@@ -4,7 +4,8 @@ using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Domain.Localization;
-using Nop.Services.Configuration; 
+using Nop.Services.Configuration;
+using Nop.Services.Events;
 
 namespace Nop.Services.Localization
 {
@@ -43,7 +44,7 @@ namespace Nop.Services.Localization
         private readonly ICacheManager _cacheManager;
         private readonly ISettingService _settingService;
         private readonly LocalizationSettings _localizationSettings;
-        //private readonly IEventPublisher _eventPublisher;
+        private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
@@ -61,7 +62,7 @@ namespace Nop.Services.Localization
         public LanguageService(ICacheManager cacheManager,
             IRepository<Language> languageRepository,
             // IStoreMappingService storeMappingService,
-            //IEventPublisher eventPublisher,
+            IEventPublisher eventPublisher,
             ISettingService settingService,
             LocalizationSettings localizationSettings
             )
@@ -71,7 +72,7 @@ namespace Nop.Services.Localization
             //this._storeMappingService = storeMappingService;
             this._settingService = settingService;
             this._localizationSettings = localizationSettings;
-            //this._eventPublisher = eventPublisher;
+            this._eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -107,7 +108,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LANGUAGES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityDeleted(language);
+            _eventPublisher.EntityDeleted(language);
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LANGUAGES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityInserted(language);
+            _eventPublisher.EntityInserted(language);
         }
 
         /// <summary>
@@ -186,7 +187,7 @@ namespace Nop.Services.Localization
             _cacheManager.RemoveByPattern(LANGUAGES_PATTERN_KEY);
 
             //event notification
-            //_eventPublisher.EntityUpdated(language);
+            _eventPublisher.EntityUpdated(language);
         }
 
         #endregion

@@ -4,6 +4,7 @@ using System.Linq;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Domain.Users;
+using Nop.Services.Events;
 
 namespace Nop.Services.Users
 {
@@ -53,7 +54,7 @@ namespace Nop.Services.Users
 
         private readonly IRepository<UserAttribute> _userAttributeRepository;
         private readonly IRepository<UserAttributeValue> _userAttributeValueRepository;
-       // private readonly IEventPublisher _eventPublisher;
+        private readonly IEventPublisher _eventPublisher;
         private readonly ICacheManager _cacheManager;
         
         #endregion
@@ -69,13 +70,13 @@ namespace Nop.Services.Users
         /// <param name="eventPublisher">Event published</param>
         public UserAttributeService(ICacheManager cacheManager,
             IRepository<UserAttribute> userAttributeRepository,
-            IRepository<UserAttributeValue> userAttributeValueRepository)
-            //IEventPublisher eventPublisher)
+            IRepository<UserAttributeValue> userAttributeValueRepository ,
+            IEventPublisher eventPublisher)
         {
             this._cacheManager = cacheManager;
             this._userAttributeRepository = userAttributeRepository;
             this._userAttributeValueRepository = userAttributeValueRepository;
-            //this._eventPublisher = eventPublisher;
+            this._eventPublisher = eventPublisher;
         }
 
         #endregion

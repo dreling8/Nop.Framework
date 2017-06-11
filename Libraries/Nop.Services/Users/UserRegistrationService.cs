@@ -3,6 +3,7 @@ using System.Linq;
 using Nop.Core;
 using Nop.Domain.Users;
 using Nop.Services.Common;
+using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Security;
 
@@ -20,7 +21,7 @@ namespace Nop.Services.Users
         private readonly ILocalizationService _localizationService;  
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IWorkContext _workContext; 
-        //private readonly IEventPublisher _eventPublisher; 
+        private readonly IEventPublisher _eventPublisher; 
         private readonly UserSettings _userSettings;
 
         #endregion
@@ -48,7 +49,7 @@ namespace Nop.Services.Users
             ILocalizationService localizationService, 
             IWorkContext workContext,
             IGenericAttributeService genericAttributeService, 
-            //IEventPublisher eventPublisher, 
+            IEventPublisher eventPublisher, 
             UserSettings userSettings)
         {
             this._userService = userService;
@@ -56,7 +57,7 @@ namespace Nop.Services.Users
             this._localizationService = localizationService; 
             this._genericAttributeService = genericAttributeService;
             this._workContext = workContext; 
-            //this._eventPublisher = eventPublisher; 
+            this._eventPublisher = eventPublisher; 
             this._userSettings = userSettings;
         }
 
@@ -260,7 +261,7 @@ namespace Nop.Services.Users
             _userService.UpdateUser(request.User);
 
             //publish event
-            //_eventPublisher.Publish(new CustomerPasswordChangedEvent(userPassword));
+            _eventPublisher.Publish(new UserPasswordChangedEvent(userPassword));
 
             return result;
         }
@@ -344,7 +345,7 @@ namespace Nop.Services.Users
             _userService.InsertUserPassword(userPassword);
 
             //publish event
-            //_eventPublisher.Publish(new UserPasswordChangedEvent(userPassword));
+            _eventPublisher.Publish(new UserPasswordChangedEvent(userPassword));
 
             return result;
         }

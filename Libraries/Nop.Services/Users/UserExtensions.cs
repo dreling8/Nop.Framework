@@ -7,9 +7,9 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Infrastructure;
 using Nop.Domain.Users;
-using Nop.Services.Common; 
-using Nop.Services.Customers.Cache;
+using Nop.Services.Common;  
 using Nop.Services.Localization;
+using Nop.Services.Users.Cache;
 
 namespace Nop.Services.Users
 {
@@ -435,7 +435,7 @@ namespace Nop.Services.Users
 
             //cache result between HTTP requests 
             var cacheManager = EngineContext.Current.ContainerManager.Resolve<ICacheManager>("nop_cache_static");
-            var cacheKey = string.Format(CustomerCacheEventConsumer.CUSTOMER_PASSWORD_LIFETIME, user.Id);
+            var cacheKey = string.Format(UserCacheEventConsumer.CUSTOMER_PASSWORD_LIFETIME, user.Id);
             //get current password usage time
             var currentLifetime = cacheManager.Get(cacheKey, () =>
             {

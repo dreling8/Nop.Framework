@@ -57,6 +57,10 @@
       <HintPath>..\..\packages\Autofac.Mvc5.4.0.1\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentValidation, Version=6.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\FluentValidation.6.4.0\lib\Net45\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -228,14 +232,31 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Factories\IUserModelFactory.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Users\AccountActivationModel.cs" />
+    <Compile Include="Models\Users\ChangePasswordModel.cs" />
+    <Compile Include="Models\Users\UserAvatarModel.cs" />
+    <Compile Include="Models\Users\LoginModel.cs" />
+    <Compile Include="Models\Users\PasswordRecoveryConfirmModel.cs" />
+    <Compile Include="Models\Users\PaswordRecoveryModel.cs" />
+    <Compile Include="Models\Users\RegisterModel.cs" />
+    <Compile Include="Models\Users\RegisterResultModel.cs" />
+    <Compile Include="Models\Users\UserInfoModel.cs" />
+    <Compile Include="Models\Users\UserAttributeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validators\Users\ChangePasswordValidator.cs" />
+    <Compile Include="Validators\Users\UserInfoValidator.cs" />
+    <Compile Include="Validators\Users\LoginValidator.cs" />
+    <Compile Include="Validators\Users\PasswordRecoveryConfirmValidator.cs" />
+    <Compile Include="Validators\Users\PasswordRecoveryValidator.cs" />
+    <Compile Include="Validators\Users\RegisterValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -298,6 +319,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
