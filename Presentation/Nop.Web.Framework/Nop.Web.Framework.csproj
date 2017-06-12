@@ -146,6 +146,9 @@
     <Compile Include="Mvc\NoTrimAttribute.cs" />
     <Compile Include="NopResourceDisplayName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Captcha\CaptchaSettings.cs" />
+    <Compile Include="Security\Captcha\CaptchaSettingsExtension.cs" />
+    <Compile Include="Security\Captcha\ReCaptchaVersion.cs" />
     <Compile Include="Validators\BaseNopValidator.cs" />
     <Compile Include="Validators\CreditCardPropertyValidator.cs" />
     <Compile Include="Validators\DecimalPropertyValidator.cs" />
