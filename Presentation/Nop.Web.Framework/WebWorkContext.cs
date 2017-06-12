@@ -5,8 +5,10 @@ using Nop.Core;
 using Nop.Core.Fakes;
 using Nop.Domain.Localization;
 using Nop.Domain.Users;
+using Nop.Services.Authentication;
 using Nop.Services.Common;
 using Nop.Services.Localization;
+using Nop.Services.Users;
 using Nop.Web.Framework.Localization;
 
 namespace Nop.Web.Framework
@@ -25,8 +27,8 @@ namespace Nop.Web.Framework
         #region Fields
 
         private readonly HttpContextBase _httpContext;
-        //private readonly IUserService _userService;
-        //private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
+        private readonly IAuthenticationService _authenticationService;
         private readonly ILanguageService _languageService;
         private readonly LocalizationSettings _localizationSettings;
         //private readonly IUserAgentHelper _userAgentHelper;
@@ -39,8 +41,8 @@ namespace Nop.Web.Framework
         #region Ctor
 
         public WebWorkContext(HttpContextBase httpContext,
-             //IUserService userService,
-             //IAuthenticationService authenticationService,
+             IUserService userService,
+            IAuthenticationService authenticationService,
              //IUserAgentHelper userAgentHelper, 
              IGenericAttributeService genericAttributeService,
             ILanguageService languageService,
@@ -49,8 +51,8 @@ namespace Nop.Web.Framework
             )
         {
             this._httpContext = httpContext;
-            //this._userService = userService;
-            //this._authenticationService = authenticationService;
+            this._userService = userService;
+            this._authenticationService = authenticationService;
             //this._userAgentHelper = userAgentHelper;
             this._languageService = languageService;
             this._localizationSettings = localizationSettings;
@@ -150,17 +152,19 @@ namespace Nop.Web.Framework
         {
             get
             {
-                return new User()
-                { 
-                    Username = "Guest",
-                    UserGuid = Guid.NewGuid(),
-                    CreatedOnUtc =  DateTime.UtcNow,
-                    LastActivityDateUtc = DateTime.UtcNow,
-                };
-                //if (_cachedUser != null)
-                //    return _cachedUser;
+                //return new User()
+                //{ 
+                //    Username = "Guest",
+                //    UserGuid = Guid.NewGuid(),
+                //    CreatedOnUtc =  DateTime.UtcNow,
+                //    LastActivityDateUtc = DateTime.UtcNow,
+                //};
 
-                //User user = null;
+                if (_cachedUser != null)
+                    return _cachedUser;
+
+                User user = null;
+
                 //if (_httpContext == null || _httpContext is FakeHttpContext)
                 //{
                 //    //check whether request is made by a background task
@@ -179,53 +183,53 @@ namespace Nop.Web.Framework
                 //    }
                 //}
 
-                ////registered user
-                //if (user == null || user.Deleted || !user.Active || user.RequireReLogin)
-                //{
-                //    user = _authenticationService.GetAuthenticatedUser();
-                //}
+                //registered user
+                if (user == null || user.Deleted || !user.Active || user.RequireReLogin)
+                {
+                    user = _authenticationService.GetAuthenticatedUser();
+                }
 
-                ////impersonate user if required (currently used for 'phone order' support)
-                //if (user != null && !user.Deleted && user.Active && !user.RequireReLogin)
-                //{
-                //    var impersonatedUserId = user.GetAttribute<int?>(SystemUserAttributeNames.ImpersonatedUserId);
-                //    if (impersonatedUserId.HasValue && impersonatedUserId.Value > 0)
-                //    {
-                //        var impersonatedUser = _userService.GetUserById(impersonatedUserId.Value);
-                //        if (impersonatedUser != null && !impersonatedUser.Deleted && impersonatedUser.Active && !impersonatedUser.RequireReLogin)
-                //        {
-                //            //set impersonated user 
-                //            user = impersonatedUser;
-                //        }
-                //    }
-                //}
+                //impersonate user if required (currently used for 'phone order' support)
+                if (user != null && !user.Deleted && user.Active && !user.RequireReLogin)
+                {
+                    var impersonatedUserId = user.GetAttribute<int?>(SystemUserAttributeNames.ImpersonatedUserId);
+                    if (impersonatedUserId.HasValue && impersonatedUserId.Value > 0)
+                    {
+                        var impersonatedUser = _userService.GetUserById(impersonatedUserId.Value);
+                        if (impersonatedUser != null && !impersonatedUser.Deleted && impersonatedUser.Active && !impersonatedUser.RequireReLogin)
+                        {
+                            //set impersonated user 
+                            user = impersonatedUser;
+                        }
+                    }
+                }
 
-                ////load guest user
-                //if (user == null || user.Deleted || !user.Active || user.RequireReLogin)
-                //{
-                //    var userCookie = GetUserCookie();
-                //    if (userCookie != null && !String.IsNullOrEmpty(userCookie.Value))
-                //    {
-                //        Guid userGuid;
-                //        if (Guid.TryParse(userCookie.Value, out userGuid))
-                //        {
-                //            var userByCookie = _userService.GetUserByGuid(userGuid);
-                //            if (userByCookie != null &&
-                //                //this user (from cookie) should not be registered
-                //                !userByCookie.IsRegistered())
-                //                user = userByCookie;
-                //        }
-                //    }
-                //}
+                //load guest user
+                if (user == null || user.Deleted || !user.Active || user.RequireReLogin)
+                {
+                    var userCookie = GetUserCookie();
+                    if (userCookie != null && !String.IsNullOrEmpty(userCookie.Value))
+                    {
+                        Guid userGuid;
+                        if (Guid.TryParse(userCookie.Value, out userGuid))
+                        {
+                            var userByCookie = _userService.GetUserByGuid(userGuid);
+                            if (userByCookie != null &&
+                                //this user (from cookie) should not be registered
+                                !userByCookie.IsRegistered())
+                                user = userByCookie;
+                        }
+                    }
+                }
 
-                ////validation
-                //if (!user.Deleted && user.Active && !user.RequireReLogin)
-                //{
-                //    SetUserCookie(user.UserGuid);
-                //    _cachedUser = user;
-                //}
+                //validation
+                if (!user.Deleted && user.Active && !user.RequireReLogin)
+                {
+                    SetUserCookie(user.UserGuid);
+                    _cachedUser = user;
+                }
 
-                //return _cachedUser;
+                return _cachedUser;
             }
             set
             {

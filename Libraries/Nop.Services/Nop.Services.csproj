@@ -147,6 +147,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\External\AuthorizationResult.cs" />
+    <Compile Include="Authentication\External\AuthorizeState.cs" />
+    <Compile Include="Authentication\External\ExternalAuthorizer.cs" />
+    <Compile Include="Authentication\External\ExternalAuthorizerHelper.cs" />
+    <Compile Include="Authentication\External\IClaimsTranslator.cs" />
+    <Compile Include="Authentication\External\IExternalAuthenticationMethod.cs" />
+    <Compile Include="Authentication\External\IExternalAuthorizer.cs" />
+    <Compile Include="Authentication\External\IExternalProviderAuthorizer.cs" />
+    <Compile Include="Authentication\External\IOpenAuthenticationService.cs" />
+    <Compile Include="Authentication\External\OpenAuthenticationParameters.cs" />
+    <Compile Include="Authentication\External\OpenAuthenticationService.cs" />
+    <Compile Include="Authentication\External\OpenAuthenticationStatus.cs" />
+    <Compile Include="Authentication\External\OpenAuthentificationExtensions.cs" />
+    <Compile Include="Authentication\External\RegistrationDetails.cs" />
+    <Compile Include="Authentication\External\UserClaims.cs" />
+    <Compile Include="Authentication\FormsAuthenticationService.cs" />
+    <Compile Include="Authentication\IAuthenticationService.cs" />
     <Compile Include="Common\GenericAttributeExtensions.cs" />
     <Compile Include="Common\GenericAttributeService.cs" />
     <Compile Include="Common\IGenericAttributeService.cs" />
