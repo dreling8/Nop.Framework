@@ -416,6 +416,7 @@ namespace Nop.Services.Users
                 Active = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow,
+                SystemName =  "Guest"
             };
 
             //add to 'Guests' role

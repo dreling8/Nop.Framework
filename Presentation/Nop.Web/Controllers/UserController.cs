@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System; 
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-using Microsoft.Owin.BuilderProperties;
+using System.Web.Mvc; 
 using Nop.Core;
 using Nop.Domain.Common;
 using Nop.Domain.Localization;
@@ -192,7 +190,7 @@ namespace Nop.Web.Controllers
         //[StoreClosed(true)]
         //available even when navigation is not allowed
         //[PublicStoreAllowNavigation(true)]
-        public virtual ActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
+        public virtual ActionResult Login(LoginModel model, string returnUrl, bool captchaValid = false)
         {
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)

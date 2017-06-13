@@ -4,7 +4,9 @@ using System.IO;
 using System.Web.Mvc;
 using Nop.Core; 
 using Nop.Core.Infrastructure;
+using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Web.Framework.Localization;
 
 namespace Nop.Web.Framework.Controllers
 {
@@ -77,50 +79,52 @@ namespace Nop.Web.Framework.Controllers
             var customer = workContext.CurrentUser;
             logger.Error(exc.Message, exc, customer);
         }
-        /// <summary>
-        /// Display success notification
-        /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
+
+        ///// <summary>
+        ///// Display success notification
+        ///// </summary>
+        ///// <param name="message">Message</param>
+        ///// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
         //protected virtual void SuccessNotification(string message, bool persistForTheNextRequest = true)
         //{
         //    AddNotification(NotifyType.Success, message, persistForTheNextRequest);
         //}
-        /// <summary>
-        /// Display error notification
-        /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
+
+        ///// <summary>
+        ///// Display error notification
+        ///// </summary>
+        ///// <param name="message">Message</param>
+        ///// <param name="persistForTheNextRequest"> A value indicating whether a message should be persisted for the next request</param>
         //protected virtual void ErrorNotification(string message, bool persistForTheNextRequest = true)
         //{
         //    AddNotification(NotifyType.Error, message, persistForTheNextRequest);
         //}
-        /// <summary>
-        /// Display error notification
-        /// </summary>
-        /// <param name="exception">Exception</param>
-        /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
-        /// <param name="logException">A value indicating whether exception should be logged</param>
+        ///// <summary>
+        ///// Display error notification
+        ///// </summary>
+        ///// <param name="exception">Exception</param>
+        ///// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
+        ///// <param name="logException">A value indicating whether exception should be logged</param>
         //protected virtual void ErrorNotification(Exception exception, bool persistForTheNextRequest = true, bool logException = true)
         //{
         //    if (logException)
         //        LogException(exception);
         //    AddNotification(NotifyType.Error, exception.Message, persistForTheNextRequest);
         //}
-        /// <summary>
-        /// Display warning notification
-        /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
+        ///// <summary>
+        ///// Display warning notification
+        ///// </summary>
+        ///// <param name="message">Message</param>
+        ///// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
         //protected virtual void WarningNotification(string message, bool persistForTheNextRequest = true) {
         //    AddNotification(NotifyType.Warning, message, persistForTheNextRequest);
         //}
-        /// <summary>
-        /// Display notification
-        /// </summary>
-        /// <param name="type">Notification type</param>
-        /// <param name="message">Message</param>
-        /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
+        ///// <summary>
+        ///// Display notification
+        ///// </summary>
+        ///// <param name="type">Notification type</param>
+        ///// <param name="message">Message</param>
+        ///// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request</param>
         //protected virtual void AddNotification(NotifyType type, string message, bool persistForTheNextRequest)
         //{
         //    string dataKey = string.Format("nop.notifications.{0}", type);
@@ -138,11 +142,11 @@ namespace Nop.Web.Framework.Controllers
         //    }
         //}
 
-        /// <summary>
-        /// Error's json data for kendo grid
-        /// </summary>
-        /// <param name="errorMessage">Error message</param>
-        /// <returns>Error's json data</returns>
+        ///// <summary>
+        ///// Error's json data for kendo grid
+        ///// </summary>
+        ///// <param name="errorMessage">Error message</param>
+        ///// <returns>Error's json data</returns>
         //protected JsonResult ErrorForKendoGridJson(string errorMessage)
         //{
         //    var gridModel = new DataSourceResult
@@ -153,10 +157,10 @@ namespace Nop.Web.Framework.Controllers
         //    return Json(gridModel);
         //}
 
-        /// <summary>
-        /// Display "Edit" (manage) link (in public store)
-        /// </summary>
-        /// <param name="editPageUrl">Edit page URL</param>
+        ///// <summary>
+        ///// Display "Edit" (manage) link (in public store)
+        ///// </summary>
+        ///// <param name="editPageUrl">Edit page URL</param>
         //protected virtual void DisplayEditLink(string editPageUrl)
         //{
         //    //We cannot use ViewData because it works only for the current controller (and we pass and then render "Edit" link data in distinct controllers)
@@ -168,12 +172,12 @@ namespace Nop.Web.Framework.Controllers
 
 
 
-        /// <summary>
-        /// Add locales for localizable entities
-        /// </summary>
-        /// <typeparam name="TLocalizedModelLocal">Localizable model</typeparam>
-        /// <param name="languageService">Language service</param>
-        /// <param name="locales">Locales</param>
+        ///// <summary>
+        ///// Add locales for localizable entities
+        ///// </summary>
+        ///// <typeparam name="TLocalizedModelLocal">Localizable model</typeparam>
+        ///// <param name="languageService">Language service</param>
+        ///// <param name="locales">Locales</param>
         //protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, IList<TLocalizedModelLocal> locales) where TLocalizedModelLocal : ILocalizedModelLocal
         //{
         //    AddLocales(languageService, locales, null);
@@ -186,19 +190,19 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="languageService">Language service</param>
         /// <param name="locales">Locales</param>
         /// <param name="configure">Configure action</param>
-        //protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, int> configure) where TLocalizedModelLocal : ILocalizedModelLocal
-        //{
-        //    foreach (var language in languageService.GetAllLanguages(true))
-        //    {
-        //        var locale = Activator.CreateInstance<TLocalizedModelLocal>();
-        //        locale.LanguageId = language.Id;
-        //        if (configure != null)
-        //        {
-        //            configure.Invoke(locale, locale.LanguageId);
-        //        }
-        //        locales.Add(locale);
-        //    }
-        //}
+        protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, int> configure) where TLocalizedModelLocal : ILocalizedModelLocal
+        {
+            foreach (var language in languageService.GetAllLanguages(true))
+            {
+                var locale = Activator.CreateInstance<TLocalizedModelLocal>();
+                locale.LanguageId = language.Id;
+                if (configure != null)
+                {
+                    configure.Invoke(locale, locale.LanguageId);
+                }
+                locales.Add(locale);
+            }
+        }
 
     }
 }

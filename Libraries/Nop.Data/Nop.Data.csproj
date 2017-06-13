@@ -76,6 +76,7 @@
     <Compile Include="Mapping\Logging\ActivityLogTypeMap.cs" />
     <Compile Include="Mapping\Logging\LogMap.cs" />
     <Compile Include="Mapping\Security\PermissionRecordMap.cs" />
+    <Compile Include="Mapping\Users\UserPasswordMap.cs" />
     <Compile Include="Mapping\Users\UserRoleMap.cs" />
     <Compile Include="Mapping\Users\ExternalAuthenticationRecordMap.cs" />
     <Compile Include="Mapping\Users\UserMap.cs" />

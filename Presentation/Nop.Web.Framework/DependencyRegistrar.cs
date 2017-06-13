@@ -16,12 +16,17 @@ using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;
 using Nop.Domain.Configuration;
+using Nop.Services.Authentication;
+using Nop.Services.Authentication.External;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Events;
+using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Services.Security;
 using Nop.Services.Users;
+using Nop.Web.Framework.UI;
 
 namespace Nop.Web.Framework
 {
@@ -124,12 +129,24 @@ namespace Nop.Web.Framework
             builder.RegisterType<UserRegistrationService>().As<IUserRegistrationService>().InstancePerLifetimeScope();
             //builder.RegisterType<UserReportService>().As<IUserReportService>().InstancePerLifetimeScope();
 
+            builder.RegisterType<EncryptionService>().As<IEncryptionService>().InstancePerLifetimeScope();
+            builder.RegisterType<FormsAuthenticationService>().As<IAuthenticationService>().InstancePerLifetimeScope();
+            builder.RegisterType<DateTimeHelper>().As<IDateTimeHelper>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<ExternalAuthorizer>().As<IExternalAuthorizer>().InstancePerLifetimeScope();
+            builder.RegisterType<OpenAuthenticationService>().As<IOpenAuthenticationService>().InstancePerLifetimeScope();
+
+
 
             //use static cache (between HTTP requests)
             builder.RegisterType<SettingService>().As<ISettingService>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"))
                 .InstancePerLifetimeScope();
             builder.RegisterSource(new SettingsSource());
+
+
+            //builder.RegisterType<PageHeadBuilder>().As<IPageHeadBuilder>().InstancePerLifetimeScope();
 
             //Register event consumers
             var consumers = typeFinder.FindClassesOfType(typeof(IConsumer<>)).ToList();

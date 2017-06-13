@@ -220,6 +220,16 @@ namespace Nop.Web.Framework
                                 user = userByCookie;
                         }
                     }
+                    //else
+                    //{
+                    //    user = _userService.GetUserBySystemName("Guest");
+                    //}
+                }
+
+                //create guest if not exists
+                if (user == null || user.Deleted || !user.Active || user.RequireReLogin)
+                {
+                    user = _userService.InsertGuestUser();
                 }
 
                 //validation

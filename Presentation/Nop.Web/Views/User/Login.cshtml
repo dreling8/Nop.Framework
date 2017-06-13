@@ -1,30 +1,32 @@
-﻿@model Nop.Web.Models.Users.LoginModel
-@using Nop.Web.Models.Customer;
-@using Nop.Core;
-@using Nop.Core.Infrastructure;
-@using OfficeOpenXml.FormulaParsing.Excel.Functions.Text
+﻿@model Nop.Web.Models.Users.LoginModel  
+@using Nop.Core
+@using Nop.Core.Infrastructure
+ 
 @{
-    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+    // Layout = "~/Views/Shared/_ColumnsOne.cshtml";
 
+    Layout = null;
     //title
-    Html.AddTitleParts(T("PageTitle.Login").Text);
+    //Html.AddTitleParts(T("PageTitle.Login").Text);
     //page class
-    Html.AppendPageCssClassParts("html-login-page");
+    //Html.AppendPageCssClassParts("html-login-page");
 
     //register URL with return URL (if specified)
-    var registerUrl = Url.RouteUrl("Register");
-    if (!String.IsNullOrEmpty(this.Context.Request.QueryString["returnUrl"]))
-    {
-        var webHelper = EngineContext.Current.Resolve<IWebHelper>();
-        registerUrl = webHelper.ModifyQueryString(registerUrl, "returnurl=" + HttpUtility.UrlEncode(this.Context.Request.QueryString["returnUrl"]), null);
-    }
+    //var registerUrl = Url.RouteUrl("Register");
+
+    var registerUrl = "";
+       //if (!String.IsNullOrEmpty(this.Context.Request.QueryString["returnUrl"]))
+       //{
+       //    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+       //    registerUrl = webHelper.ModifyQueryString(registerUrl, "returnurl=" + HttpUtility.UrlEncode(this.Context.Request.QueryString["returnUrl"]), null);
+       //}
 }
 <div class="page login-page">
     <div class="page-title">
         <h1>@T("Account.Login.Welcome")</h1>
     </div>
-    @Html.Partial("_ExternalAuthentication.AssociateMessage")
-    @Html.Partial("_ExternalAuthentication.Errors")
+    @*@Html.Partial("_ExternalAuthentication.AssociateMessage")
+    @Html.Partial("_ExternalAuthentication.Errors")*@
     <div class="page-body">
         <div class="customer-blocks">
             @if (Model.CheckoutAsGuest)
@@ -34,7 +36,7 @@
                         <strong>@T("Account.Login.CheckoutAsGuestOrRegister")</strong>
                     </div>
                     <div class="text">
-                        @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutAsGuestOrRegister" })
+                        @*@Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutAsGuestOrRegister" })*@
                     </div>
                     <div class="buttons">
                         <input type="button" class="button-1 checkout-as-guest-button" onclick="location.href='@Url.RouteUrl("Checkout")'" value="@T("Account.Login.CheckoutAsGuest")" />
@@ -93,7 +95,7 @@
                             @Html.CheckBoxFor(m => m.RememberMe)
                             @Html.LabelFor(m => m.RememberMe)
                             <span class="forgot-password">
-                                @Html.RouteLink(T("Account.Login.ForgotPassword").Text, "PasswordRecovery")
+                                @*@Html.RouteLink(T("Account.Login.ForgotPassword").Text, "PasswordRecovery")*@
                             </span>
                         </div>
                         @if (Model.DisplayCaptcha)
@@ -110,8 +112,8 @@
             </div>
         </div>
         <div class="external-authentication">
-            @Html.Action("ExternalMethods", "ExternalAuthentication")
+            @*@Html.Action("ExternalMethods", "ExternalAuthentication")*@
         </div>
-        @Html.Action("TopicBlock", "Topic", new { systemName = "LoginRegistrationInfo" })
+       @* @Html.Action("TopicBlock", "Topic", new { systemName = "LoginRegistrationInfo" })*@
     </div>
 </div>
